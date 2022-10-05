@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-import { UserModel } from "../models";
 
 
 export interface Token {
@@ -9,16 +8,17 @@ export interface Token {
 }
 
 
-export function createToken (user: any): Token {
+export function createToken (user: any): string {
   const token = jwt.sign(
     {
       id: user._id,
       phone: user.phone,
       role: user.role,
+      verified: user.verified,
     },
     process.env.JWT_SECRET,
     {
-      expiresIn: "1d",
+      expiresIn: "1y",
     }
   );
   return token;

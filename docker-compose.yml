@@ -10,6 +10,7 @@ services:
     volumes:
       - ./api:/api
       - /api/node_modules
+    command: npm run start:nodemon
 
   # database:
   #   container_name: mysql

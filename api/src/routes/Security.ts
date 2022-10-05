@@ -4,11 +4,10 @@ import { UserClass, UserModel } from "../models";
 import express from 'express';
 const router = express.Router();
 
-router.get("/", (req, res) => { res.json("ok") });
 
 router.post("/login", async (req, res) => {
   try {
-    const user: UserClass = await UserModel.findOne({ email: req.body.email, banned: null });
+    const user: UserClass = await UserModel.findOne({ phone: req.body.phone, banned: null });
 
     if (user && (await user.comparePassword(req.body.password))) {
       const token = createToken(user);
@@ -17,7 +16,8 @@ router.post("/login", async (req, res) => {
       res.status(401).json({ username: "Invalid credentials" });
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error(err.message);
+    res.status(400).json({ message: "Internal issues" });
   }
 });
 
