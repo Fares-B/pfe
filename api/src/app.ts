@@ -1,11 +1,14 @@
 import dotenv from 'dotenv';
 import express from 'express';
+import cors from 'cors';
 import routes from './routes';
 import middlewares from './middlewares';
 import { userRolesEnum } from './models/type';
 
+
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 // import environment variable
 if (process.env.NODE_ENV !== 'production') {
