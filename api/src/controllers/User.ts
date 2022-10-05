@@ -5,41 +5,29 @@ import { UserModel } from "../models";
 export default {
   cget: async (req: any, res: any) => {
     try {
-      const users = await UserModel.find({ ...req.body, banned: null });
+      const users = await UserModel.find({ ...req.query });
       res.json(users);
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      res.status(500).json({ message: "Internal issues" });
     }
   },
 
   post: async (req: any, res: any) => {
-    res.json("ok");
-    // try {
-    //   const userData = { username: req.body.username, email: req.body.email, phone: req.body.phone, password: req.body.password };
-    //   console.log("passed 1");
-    //   const user = new UserModel(userData);
-    //   console.log("passed 2");
-    //   await user.savePassword(req.body.password);
-    //   console.log("passed 3");
-    //   await user.save();
-    //   console.log("passed 4");
-    //   res.status(201).json(user);
-    // } catch (err) {
-    //   res.status(500).json({ message: err.message });
-    // }
+    try {
+      const user = new UserModel({ ...req.body });
+      await user.savePassword(req.body.password);
+      await user.save();
+      res.status(201).json(user);
+    } catch (err) {
+      res.status(400).json({ message: "Internal issues" });
+    }
   },
 
   get: async (req: any, res: any) => {
-    return res.json(req.user);
     try {
-      const user = await UserModel.findOne({
-        _id: new mongoose.Types.ObjectId(req.user._id),
-        deleted: null,
-      });
-      if (!user) {
-        return res.status(403).json({ message: "User not found" });
-      }
-      res.json({
+      const user = await UserModel.findByIdAndUpdate(req.params.id, { ...req.body });
+      if (!user) return res.status(403).json({ message: "User not found" });
+      res.status(200).json({
         _id: user._id,
         email: user.email,
         phone: user.phone,
@@ -48,7 +36,8 @@ export default {
         updatedAt: user.updatedAt,
       });
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      
+      res.status(400).json({ message: "Internal issues" });
     }
   },
 
@@ -63,9 +52,7 @@ export default {
       if (req.body.username) user.username = req.body.username;
       if (req.body.phone) user.phone = req.body.phone;
       if (req.body.email) user.email = req.body.email;
-      if (req.body.password) user.savePassword(req.body.password);
-
-      user.updatedAt = new Date();
+      if (req.body.password) await user.savePassword(req.body.password);
 
       await user.save();
       res.json({
@@ -79,7 +66,7 @@ export default {
         }
       });
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      res.status(500).json({ message: "Internal issues" });
     }
   },
 
@@ -98,22 +85,4 @@ export default {
   //     res.status(500).json({ message: err.message });
   //   }
   // },
-  ban: async (req: any, res: any) => {
-    const { reason, id } = req.body;
-    try {
-      const user = await UserModel.findOne({
-        _id: new mongoose.Types.ObjectId(id),
-        banned: null,
-      });
-      if (user === null) throw new Error('User not found');
-      user.banned = {
-        reason: reason,
-        date: new Date(),
-      };
-      await user.save();
-      res.status(204).end();
-    } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
-  },
 }

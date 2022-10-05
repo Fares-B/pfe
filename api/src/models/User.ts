@@ -7,7 +7,7 @@ const SALT_ROUNDS = 10;
 
 export class BannedSchema {
     @prop({ enum: bannedReasonEnum, default: bannedReasonEnum.OTHER })
-    reason!: string;
+    reason!: bannedReasonEnum;
 
     @prop({ default: Date.now })
     date!: Date;
