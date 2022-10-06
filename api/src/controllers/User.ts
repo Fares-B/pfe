@@ -15,7 +15,6 @@ export default {
   post: async (req: any, res: any) => {
     try {
       const user = new UserModel({ ...req.body });
-      await user.savePassword(req.body.password);
       await user.save();
       res.status(201).json(user);
     } catch (err) {
@@ -43,16 +42,12 @@ export default {
 
   put: async (req: any, res: any) => {
     try {
-      let user = await UserModel.findOne({
+      let user = await UserModel.findOneAndUpdate({
         _id: new mongoose.Types.ObjectId(req.user.id),
         banned: null,
-      });
+      }, { ...req.body });
 
       if (user === null) throw new Error('User not found');
-      if (req.body.username) user.username = req.body.username;
-      if (req.body.phone) user.phone = req.body.phone;
-      if (req.body.email) user.email = req.body.email;
-      if (req.body.password) await user.savePassword(req.body.password);
 
       await user.save();
       res.json({

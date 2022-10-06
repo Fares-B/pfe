@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { prop, getModelForClass, modelOptions } from "@typegoose/typegoose";
+import { prop, pre, getModelForClass, modelOptions } from "@typegoose/typegoose";
 import { bannedReasonEnum, userRolesEnum } from "./type";
 
 const SALT_ROUNDS = 10;
@@ -12,6 +12,14 @@ export class BannedSchema {
     @prop({ default: Date.now })
     date!: Date;
 }
+
+@pre<UserClass>("save", async function (next) {
+    if (this.isModified("password")) {
+        this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
+    }
+    this.updatedAt = new Date();
+    next();
+})
 
 @modelOptions({ schemaOptions: { collection: 'users' }})
 export class UserClass {
@@ -46,8 +54,6 @@ export class UserClass {
     public lastLogin: Date;
 
     comparePassword: (candidatePassword: string) => Promise<boolean>;
-
-    savePassword: (password: string) => Promise<void>;
 }
 
 
@@ -57,10 +63,6 @@ UserClass.prototype.comparePassword = async function (candidatePassword: string)
     } catch (err) {
         return false;
     }
-};
-
-UserClass.prototype.savePassword = async function (password: string) {
-    this.password = await bcrypt.hash(password, SALT_ROUNDS);
 };
 
 export const UserModel = getModelForClass(UserClass);
