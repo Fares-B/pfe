@@ -21,7 +21,7 @@ const query = async (path: string, method: medthodType, body: any = null): Promi
     if(token) options.headers.Authorization = "Bearer " + token;
     if(body) options.body = JSON.stringify(body);
     try {
-        const res = await fetch(process.env.BACKEND_BASE_URL || "http://localhost:3001" +  path, options);
+        const res = await fetch(process.env.BACKEND_BASE_URL +  path, options);
         const data = await res.json();
         return data;
     } catch (err) {
