@@ -93,4 +93,4 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.PROJECT_ID_PROD }}
           VERCEL_ORG_ID: ${{ secrets.ORG_ID }}
   
-      url: https://pfe-fares-b.vercel.app/
+      # url: https://pfe-fares-b.vercel.app/
