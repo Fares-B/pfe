@@ -15,10 +15,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: dev
     env:
-      MONGODB_CONNECTION_STR: ${{ secrets.MONGODB_CONNECTION_STR }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      MONGODB_CONNECTION_STR: ${{ secrets.MONGODB_CONNECTION_STR_DEV }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET_DEV }}
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 16.x
@@ -34,10 +33,9 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
-    environment: dev
     env:
-      MONGODB_CONNECTION_STR: ${{ secrets.MONGODB_CONNECTION_STR }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      MONGODB_CONNECTION_STR: ${{ secrets.MONGODB_CONNECTION_STR_DEV }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET_DEV }}
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 16.x
@@ -55,10 +53,9 @@ jobs:
     needs: test
     if: github.ref == 'refs/heads/develop'
     name: "Deploy api to Vercel dev"
-    environment: dev
     env:
-      MONGODB_CONNECTION_STR: ${{ secrets.MONGODB_CONNECTION_STR }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      MONGODB_CONNECTION_STR: ${{ secrets.MONGODB_CONNECTION_STR_DEV }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET_DEV }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -71,15 +68,14 @@ jobs:
         run: npx vercel --token ${VERCEL_TOKEN}
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.PROJECT_ID_DEV }}
+          VERCEL_ORG_ID: ${{ secrets.ORG_ID }}
   
   vercel-prod:
     needs: test
-    environment: prod
     env:
-      MONGODB_CONNECTION_STR: ${{ secrets.MONGODB_CONNECTION_STR }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      MONGODB_CONNECTION_STR: ${{ secrets.MONGODB_CONNECTION_STR_PROD }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET_PROD }}
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     name: "Deploy api to Vercel prod"
@@ -94,8 +90,8 @@ jobs:
         run: npx vercel --token ${VERCEL_TOKEN} --prod
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.PROJECT_ID_PROD }}
+          VERCEL_ORG_ID: ${{ secrets.ORG_ID }}
 
   # deploy-dev:
   #   needs: test
