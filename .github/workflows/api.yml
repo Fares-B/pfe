@@ -11,10 +11,14 @@ on:
     branches: 
       - develop
       - master
+
 jobs:
   build:
     runs-on: ubuntu-latest
     environment: dev
+    env:
+      MONGODB_CONNECTION_STR: ${{ secrets.MONGODB_CONNECTION_STR }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 16.x
@@ -31,6 +35,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     environment: dev
+    env:
+      MONGODB_CONNECTION_STR: ${{ secrets.MONGODB_CONNECTION_STR }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 16.x
@@ -48,8 +55,10 @@ jobs:
     needs: test
     if: github.ref == 'refs/heads/develop'
     name: "Deploy api to Vercel dev"
-    environment:
-      name: dev
+    environment: dev
+    env:
+      MONGODB_CONNECTION_STR: ${{ secrets.MONGODB_CONNECTION_STR }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -68,6 +77,9 @@ jobs:
   vercel-prod:
     needs: test
     environment: prod
+    env:
+      MONGODB_CONNECTION_STR: ${{ secrets.MONGODB_CONNECTION_STR }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     name: "Deploy api to Vercel prod"
