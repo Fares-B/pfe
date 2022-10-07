@@ -4,7 +4,7 @@ import app from "../app";
 describe("user", () => {
     describe("test", () => {
         it("should return 200", async () => {
-            await supertest(app).get("/").expect(400);
+            await supertest(app).get("/").expect(500);
         });
     });
 });
