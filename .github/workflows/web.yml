@@ -1,19 +1,22 @@
-# name: CI-WEB
+name: CI-WEB
 
 on:
   push:
     paths:
       - "web/**"
-    branches: [ develop ]
+    branches:
+      - master
+      - develop
   pull_request:
-      branches: [ develop ]
+      branches:
+      - master
+      - develop
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to production
-        working-directory: web
         run: echo "Deploying to production web..."
 
 # jobs:
