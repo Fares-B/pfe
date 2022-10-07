@@ -46,10 +46,11 @@ jobs:
 
   vercel-dev:
     needs: test
-    runs-on: ubuntu-latest
-    name: "Deploy api to Vercel dev"
-    environment: dev
     if: github.ref == 'refs/heads/develop'
+    name: "Deploy api to Vercel dev"
+    environment:
+      name: dev
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -66,10 +67,10 @@ jobs:
   
   vercel-prod:
     needs: test
-    runs-on: ubuntu-latest
-    name: "Deploy api to Vercel prod"
     environment: prod
     if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    name: "Deploy api to Vercel prod"
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
