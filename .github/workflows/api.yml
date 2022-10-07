@@ -8,14 +8,10 @@ on:
   pull_request:
       branches: [ develop ]
 
-env:
-  MONGODB_CONNECTION_STR: ${{ secrets.MONGODB_CONNECTION_STR }}
-  JWT_SECRET: ${{ secrets.JWT_SECRET }}
-
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 16.x
@@ -31,6 +27,7 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 16.x
@@ -44,34 +41,74 @@ jobs:
         working-directory: api
         run: npm run test
 
-  deploy-dev:
-    needs: test
+  vercel-dev:
     runs-on: ubuntu-latest
-
-    environment:
-      name: dev
-      url: https://pfe-dev.vercel.app/
-
+    name: "Deploy api to Vercel dev"
+    environment: dev
+    needs: test
     if: github.ref == 'refs/heads/develop'
     steps:
       - uses: actions/checkout@v2
-      - uses: amondnet/vercel-action@v19
+      - uses: actions/setup-node@v1
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
-          # github-token: ${{ secrets.GITHUB_TOKEN }} #Optional 
-          vercel-args: '--prod' #Optional
-          vercel-org-id: ${{ secrets.ORG_ID}}  #Required
-          vercel-project-id: ${{ secrets.PROJECT_ID}} #Required 
-          working-directory: ./api #Your Working Directory, Optional
-          # alias-domains: | #Optional
-          #   staging.angular.vercel-action.amond.dev
-          #   pr-{{PR_NUMBER}}.angular.vercel-action.amond.dev
-      # - name: Install dependencies
-      #   run: npm install
-      # - name: Build
-      #   run: npm run build --if-present
-      - name: Deploy to developement
-        run: echo "Deploying to developement api..."
+          node-version: '14'
+          registry-url: https://registry.npmjs.org/
+
+      - name: "Deploy to Vercel"
+        run: npx vercel --token ${VERCEL_TOKEN}
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  
+  vercel-prod:
+    runs-on: ubuntu-latest
+    name: "Deploy api to Vercel prod"
+    environment: prod
+    needs: test
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+          registry-url: https://registry.npmjs.org/
+
+      - name: "Deploy to Vercel"
+        run: npx vercel --token ${VERCEL_TOKEN} --prod
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+
+  # deploy-dev:
+  #   needs: test
+  #   runs-on: ubuntu-latest
+
+  #   environment:
+  #     name: dev
+  #     url: https://pfe-dev.vercel.app/
+
+  #   if: github.ref == 'refs/heads/develop'
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: amondnet/vercel-action@v19
+  #       with:
+  #         vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+  #         # github-token: ${{ secrets.GITHUB_TOKEN }} #Optional 
+  #         vercel-args: '--prod' #Optional
+  #         vercel-org-id: ${{ secrets.ORG_ID}}  #Required
+  #         vercel-project-id: ${{ secrets.PROJECT_ID}} #Required 
+  #         working-directory: ./api #Your Working Directory, Optional
+  #         # alias-domains: | #Optional
+  #         #   staging.angular.vercel-action.amond.dev
+  #         #   pr-{{PR_NUMBER}}.angular.vercel-action.amond.dev
+  #     # - name: Install dependencies
+  #     #   run: npm install
+  #     # - name: Build
+  #     #   run: npm run build --if-present
+  #     - name: Deploy to developement
+  #       run: echo "Deploying to developement api..."
   
   deploy-prod:
     needs: test
