@@ -4,9 +4,9 @@ on:
   push:
     paths:
       - "web/**"
-    branches: [ feature/test ]
+    branches: [ develop ]
   pull_request:
-      branches: [ feature/test ]
+      branches: [ develop ]
 
 jobs:
   test:

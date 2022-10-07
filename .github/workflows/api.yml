@@ -4,9 +4,9 @@ on:
   push:
     paths:
       - "api/**"
-    branches: [ feature/test ]
+    branches: [ develop ]
   pull_request:
-      branches: [ feature/test ]
+      branches: [ develop ]
 
 env:
   MONGODB_CONNECTION_STR: ${{ secrets.MONGODB_CONNECTION_STR }}
