@@ -8,7 +8,9 @@ on:
       - master
       - develop
   pull_request:
-      branches:
+    paths:
+      - "web/**"
+    branches:
       - master
       - develop
 

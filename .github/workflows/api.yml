@@ -8,6 +8,8 @@ on:
       - develop
       - master
   pull_request:
+    paths:
+      - "api/**"
     branches: 
       - develop
       - master
