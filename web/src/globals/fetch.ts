@@ -1,4 +1,4 @@
-import { LoginProps, NODE_ENV_TYPE, RegisterProps } from "./type";
+import { LoginProps, RegisterProps } from "./type";
 
 
 type medthodType = "PUT"|"POST"|"GET";
@@ -9,10 +9,7 @@ interface OptionsProps {
     body?: string;
 }
 
-const API_PROD_URL = "https://api-pfe.vercel.app";
-const API_TEST_URL = "https://pfe-dev.vercel.app";
-const BACKEND_BASE_URL = process.env.NODE_ENV === NODE_ENV_TYPE.PRODUCTION ? API_PROD_URL : process.env.NODE_ENV === NODE_ENV_TYPE.TEST ? API_TEST_URL : "http://localhost:3000";
-
+const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL;
 
 const query = async (path: string, method: medthodType, body: any = null): Promise<any> => {
     const token = localStorage.getItem("token");
