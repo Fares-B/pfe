@@ -51,7 +51,7 @@ jobs:
 
   vercel-dev:
     needs: test
-    if: github.ref == 'refs/heads/develop'
+    # if: github.ref == 'refs/heads/develop'
     name: "Deploy api to Vercel dev"
     env:
       MONGODB_CONNECTION_STR: ${{ secrets.MONGODB_CONNECTION_STR_DEV }}
