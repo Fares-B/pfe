@@ -22,7 +22,7 @@
   },
   "scripts": {
     "start": "env-cmd -f .env react-scripts start",
-    "build": "BACKEND_BASE_URL=https://pfe-dev.vercel.app react-scripts build",
+    "build": "react-scripts build",
     "start-build": "serve -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
