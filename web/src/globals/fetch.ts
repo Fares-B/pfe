@@ -9,7 +9,6 @@ interface OptionsProps {
     body?: string;
 }
 
-const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL;
 
 const query = async (path: string, method: medthodType, body: any = null): Promise<any> => {
     const token = localStorage.getItem("token");
@@ -23,7 +22,7 @@ const query = async (path: string, method: medthodType, body: any = null): Promi
     if(token) options.headers.Authorization = "Bearer " + token;
     if(body) options.body = JSON.stringify(body);
     try {
-        const res = await fetch(BACKEND_BASE_URL + path, options);
+        const res = await fetch(process.env.REACT_APP_BACKEND_BASE_URL + path, options);
         const data = await res.json();
         return data;
     } catch (err) {
