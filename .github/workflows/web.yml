@@ -29,6 +29,12 @@ jobs:
     name: "Deploy web to Vercel dev"
     runs-on: ubuntu-latest
     steps:
+    
+      - name: run install and build
+        run: |
+          cd web
+          npm install
+          npm run build
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.2
         with:
