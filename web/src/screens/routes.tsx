@@ -1,6 +1,7 @@
 import Private from "./private";
 import Public from "./public";
 
+
 export interface PropsRoute {
   path: string;
   element: any;
