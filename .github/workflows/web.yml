@@ -29,26 +29,18 @@ jobs:
     name: "Deploy web to Vercel dev"
     runs-on: ubuntu-latest
     steps:
-    
-      - name: run install and build
-        run: |
-          cd web
-          npm install
-          npm run build
-      - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v1.2
-        with:
-          publish-dir: './web/build'
-          production-branch: feature/ci_web
-          deploy-message: "Deploy from GitHub Actions"
-          # enable-pull-request-comment: false
-          # enable-commit-comment: true
-          # overwrites-pull-request-comment: true
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN_DEV }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_DEV }}
-          REACT_APP_BACKEND_BASE_URL: https://pfe-dev.vercel.app/
-        timeout-minutes: 1
+    - uses: actions/checkout@master
+
+    - name: Publish
+      uses: netlify/actions/build@master
+      env:
+        # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_DEV }}
+        NETLIFY_BASE: site
+        NETLIFY_CMD: npm build
+        NETLIFY_DIR: site/web
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN_DEV }}
+        REACT_APP_BACKEND_BASE_URL: https://pfe-dev.vercel.app/
       
 # jobs:
 #   build:
