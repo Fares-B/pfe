@@ -7,14 +7,12 @@ on:
     branches:
       - master
       - develop
-      - feature/ci_web
   pull_request:
     paths:
       - "web/**"
     branches:
       - master
       - develop
-      - feature/ci_web
 
 jobs:
   test:
@@ -25,7 +23,7 @@ jobs:
 
   deploy-dev:
     needs: test
-    # if: github.base_ref == 'develop'
+    if: github.base_ref == 'develop'
     name: "Deploy web to Vercel dev"
     runs-on: ubuntu-latest
     steps:
@@ -41,29 +39,3 @@ jobs:
         NETLIFY_DIR: site/web
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN_DEV }}
         REACT_APP_BACKEND_BASE_URL: https://pfe-dev.vercel.app/
-      
-# jobs:
-#   build:
-#     runs-on: self-hosted
-#     steps:
-#       - uses: actions/checkout@v3
-#       - name: Use Node.js ${{ matrix.node-version }}
-#         uses: actions/setup-node@v1
-#         with:
-#             node-version: ${{ matrix.node-version }}
-#       - name: Install dependencies
-#         run: npm install
-#       - name: Build
-#         run: npm run build --if-present
-
-#   deploy:
-#     runs-on: self-hosted
-#     steps:
-#       - uses: actions/checkout@v2
-#       - name: Install dependencies
-#         run: npm install
-#       - name: Build
-#         run: npm run build --if-present
-#       - name: Deploy to production
-#         run:
-#           echo "Deploying to production..."
