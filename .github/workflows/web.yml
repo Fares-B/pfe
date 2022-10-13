@@ -32,7 +32,7 @@ jobs:
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.2
         with:
-          publish-dir: './build'
+          publish-dir: './web/build'
           production-branch: feature/ci_web
           deploy-message: "Deploy from GitHub Actions"
           # enable-pull-request-comment: false

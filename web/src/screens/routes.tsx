@@ -13,7 +13,6 @@ export interface PropsRoute {
 export enum ROUTE_NAME {
   // public
   LOGIN = "/login",
-  REGISTER = "/register",
   FORGOT_PASSWORD = "/forgot-password",
   RESET_PASSWORD = "/reset-password",
 
@@ -32,12 +31,6 @@ const routes: PropsRoute[] = [
     path: ROUTE_NAME.LOGIN,
     element: Public.Login,
     title: "Connexion",
-    layout: "public",
-  },
-  {
-    path: ROUTE_NAME.REGISTER,
-    element: Public.Signup,
-    title: "Inscription",
     layout: "public",
   },
   {
