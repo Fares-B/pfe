@@ -10,22 +10,38 @@ export interface PropsRoute {
   hide?: boolean;
 };
 
+export enum ROUTE_NAME {
+  // public
+  LOGIN = "/login",
+  REGISTER = "/register",
+  FORGOT_PASSWORD = "/forgot-password",
+  RESET_PASSWORD = "/reset-password",
+
+  // private
+  HOME = "/",
+  PROFILE = "/profile",
+
+  // other
+  NOT_FOUND = "/not-found",
+  // ERROR = "/error",
+};
+
 const routes: PropsRoute[] = [
   //layout public
   {
-    path: "/",
+    path: ROUTE_NAME.LOGIN,
     element: Public.Login,
     title: "Connexion",
     layout: "public",
   },
   {
-    path: "/signup",
+    path: ROUTE_NAME.REGISTER,
     element: Public.Signup,
     title: "Inscription",
     layout: "public",
   },
   {
-    path: "/forgot",
+    path: ROUTE_NAME.FORGOT_PASSWORD,
     element: Public.Forgot,
     title: "Mot de passe oublié",
     layout: "public",
@@ -40,7 +56,7 @@ const routes: PropsRoute[] = [
 
   // layout private
   {
-    path: "/",
+    path: ROUTE_NAME.HOME,
     element: Private.Home,
     title: "Accueil",
     layout: "private",
