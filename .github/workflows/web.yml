@@ -25,7 +25,7 @@ jobs:
 
   deploy-dev:
     needs: test
-    if: github.base_ref == 'develop'
+    if: github.base_ref == 'feature/ci_web'
     name: "Deploy web to Vercel dev"
     runs-on: ubuntu-latest
     steps:
@@ -33,7 +33,7 @@ jobs:
         uses: nwtgck/actions-netlify@v1.2
         with:
           publish-dir: './build'
-          production-branch: develop
+          production-branch: feature/ci_web
           deploy-message: "Deploy from GitHub Actions"
           # enable-pull-request-comment: false
           # enable-commit-comment: true
