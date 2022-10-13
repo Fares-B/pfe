@@ -2,9 +2,7 @@ import React from "react";
 import routes from "../screens/routes";
 import { Routes, Route } from "react-router-dom";
 
-interface Props {
-  ok?: boolean;
-}
+interface Props {};
 
 export default function Public(props: Props): React.ReactElement {
 

@@ -4,8 +4,7 @@ import Center from "./Center";
 import HStack from "./HStack";
 import VStack from "./VStack";
 
-
-export default {
+export {
   Button,
   Title,
   Center,

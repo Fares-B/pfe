@@ -5,9 +5,10 @@ import Title from "../../../components/Title";
 import VStack from "../../../components/VStack";
 import { loginRequest } from "../../../globals/fetch";
 import { LoginProps } from "../../../globals/type";
+import { ROUTE_NAME } from "../../routes";
 
 
-export default function Login(): React.ReactElement {
+export default function Login(props: any): React.ReactElement {
   const [form, setForm] = useState<LoginProps>({
     phone: "",
     password: "",
@@ -59,6 +60,7 @@ export default function Login(): React.ReactElement {
             <input type="password" value={form.password} name="password" onChange={onChange} />
           </VStack>
           <VStack space={5}>
+            <Button label="Mot de passe oublié" onClick={() => props.navigation.navigate(ROUTE_NAME.FORGOT_PASSWORD)} />
             <Button label="CONNEXION" onClick={onSubmit} />
           </VStack>
         </VStack>
