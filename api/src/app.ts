@@ -25,6 +25,8 @@ app.get('/', (req, res) => {
 
 app.use("/users", middlewares.authentication, routes.UserRoutes);
 
+app.use("/products", middlewares.authentication, routes.ProductRoutes);
+
 app.use(
     "/bans",
     middlewares.authentication,
