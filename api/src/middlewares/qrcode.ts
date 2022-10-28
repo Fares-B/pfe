@@ -30,12 +30,13 @@ export function sendRateToArduino(rate:number) {
     // const url = process.env.NODE_URL_ARDUINO;
     // const url ="http://127.0.0.1:3002";
     const url = "http://172.17.87.193:3306";
-    console.log(url);
     if(url) {
         axios.get(url + "/" + rate).then((res) => {
-            console.log("res", res);
+            // console.log("res", res);
+            return;
         }).catch((err) => {
-            console.log("err", err);
+            // console.log("err", err);
+            return;
         });
     }
 }

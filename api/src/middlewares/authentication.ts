@@ -1,4 +1,5 @@
 import { verifyToken } from "../lib/jwt";
+import logger from "../lib/logger";
 
 export default async (req: any, res: any, next: any) => {
   const auth = req.headers.authorization;
@@ -9,7 +10,7 @@ export default async (req: any, res: any, next: any) => {
       const [type, token] = auth.split(/\s+/);
       if (type !== "Bearer") throw new Error();
       const decoded = await verifyToken(token);
-      console.log("decoded", decoded);
+      logger.silly("decoded", decoded);
       req.user = decoded;
       next();
     } catch (err) {

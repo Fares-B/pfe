@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import logger from "../lib/logger";
 import { sendRateToArduino } from "../middlewares/qrcode";
 import { ProductModel } from "../models";
 
@@ -36,7 +37,7 @@ export default {
       sendRateToArduino(Math.round(product.rate));
       res.status(200).json(product);
     } catch (err) {
-      console.log(err);
+      logger.error(err);
       res.status(400).json({ message: "Internal issues" });
     }
   },
