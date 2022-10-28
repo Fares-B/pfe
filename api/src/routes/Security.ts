@@ -1,13 +1,15 @@
 import { createToken } from "../lib/jwt";
 import { UserController } from "../controllers";
 import { UserClass, UserModel } from "../models";
-import express from 'express';
+import express from "express";
 const router = express.Router();
-
 
 router.post("/login", async (req, res) => {
   try {
-    const user: UserClass = await UserModel.findOne({ phone: req.body.phone, banned: null });
+    const user: UserClass = await UserModel.findOne({
+      phone: req.body.phone,
+      banned: null,
+    });
 
     if (user && (await user.comparePassword(req.body.password))) {
       const token = createToken(user);

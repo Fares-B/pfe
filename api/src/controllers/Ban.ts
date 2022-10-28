@@ -2,11 +2,13 @@ import mongoose from "mongoose";
 import { UserModel } from "../models";
 import { bannedReasonEnum } from "../models/type";
 
-
 export default {
   cget: async (req: any, res: any) => {
     try {
-      const users = await UserModel.find({ ...req.query, banned: { $ne: null } });
+      const users = await UserModel.find({
+        ...req.query,
+        banned: { $ne: null },
+      });
       res.status(200).json(users);
     } catch (err) {
       res.status(400).json({ message: "Internal issues" });
@@ -14,13 +16,13 @@ export default {
   },
 
   post: async (req: any, res: any) => {
-    const reason: bannedReasonEnum|null = req.body.reason;
+    const reason: bannedReasonEnum | null = req.body.reason;
     try {
       const user = await UserModel.findOne({
         _id: new mongoose.Types.ObjectId(req.params.id),
         banned: null,
       });
-      if (user === null || reason === null) throw new Error('User not found');
+      if (user === null || reason === null) throw new Error("User not found");
       user.banned = { reason, date: new Date() };
       await user.save();
       res.status(200).json(user);
@@ -45,7 +47,6 @@ export default {
         date: user.banned.date,
       });
     } catch (err) {
-      
       res.status(400).json({ message: "Internal issues" });
     }
   },
@@ -56,7 +57,7 @@ export default {
         _id: new mongoose.Types.ObjectId(req.params.id),
         banned: { $ne: null },
       });
-      if (user === null) throw new Error('User not found');
+      if (user === null) throw new Error("User not found");
       user.banned = null;
       await user.save();
       res.status(204).end();
@@ -64,4 +65,4 @@ export default {
       res.status(400).json({ message: "Internal issues" });
     }
   },
-}
+};

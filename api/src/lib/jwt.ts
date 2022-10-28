@@ -1,14 +1,12 @@
 const jwt = require("jsonwebtoken");
 
-
 export interface Token {
-  id: String;
-  phone: String;
-  role: String;
+  id: string;
+  phone: string;
+  role: string;
 }
 
-
-export function createToken (user: any): string {
+export function createToken(user: any): string {
   const token = jwt.sign(
     {
       id: user._id,
@@ -19,12 +17,12 @@ export function createToken (user: any): string {
     process.env.JWT_SECRET,
     {
       expiresIn: "1y",
-    }
+    },
   );
   return token;
 }
 
-export function verifyToken (token: string): Promise<Token> {
+export function verifyToken(token: string): Promise<Token> {
   return new Promise((resolve, reject) => {
     jwt.verify(token, process.env.JWT_SECRET, (err: any, decoded: Token) => {
       if (err) {

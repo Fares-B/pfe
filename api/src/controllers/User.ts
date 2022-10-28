@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import logger from "../lib/logger";
 import { UserModel } from "../models";
 
-
 export default {
   cget: async (req: any, res: any) => {
     try {
@@ -19,14 +18,16 @@ export default {
       await user.save();
       res.status(201).json(user);
     } catch (err) {
-      logger.error(err);
+      logger().error(err);
       res.status(400).json({ message: "Internal issues" });
     }
   },
 
   get: async (req: any, res: any) => {
     try {
-      const user = await UserModel.findByIdAndUpdate(req.params.id, { ...req.body });
+      const user = await UserModel.findByIdAndUpdate(req.params.id, {
+        ...req.body,
+      });
       if (!user) return res.status(403).json({ message: "User not found" });
       res.status(200).json({
         _id: user._id,
@@ -37,19 +38,21 @@ export default {
         updatedAt: user.updatedAt,
       });
     } catch (err) {
-      
       res.status(400).json({ message: "Internal issues" });
     }
   },
 
   put: async (req: any, res: any) => {
     try {
-      let user = await UserModel.findOneAndUpdate({
-        _id: new mongoose.Types.ObjectId(req.user.id),
-        banned: null,
-      }, { ...req.body });
+      const user = await UserModel.findOneAndUpdate(
+        {
+          _id: new mongoose.Types.ObjectId(req.user.id),
+          banned: null,
+        },
+        { ...req.body },
+      );
 
-      if (user === null) throw new Error('User not found');
+      if (user === null) throw new Error("User not found");
 
       await user.save();
       res.json({
@@ -60,7 +63,7 @@ export default {
           email: user.email,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
-        }
+        },
       });
     } catch (err) {
       res.status(500).json({ message: "Internal issues" });
@@ -82,4 +85,4 @@ export default {
   //     res.status(500).json({ message: err.message });
   //   }
   // },
-}
+};

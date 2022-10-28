@@ -1,80 +1,85 @@
 import bcrypt from "bcrypt";
-import { prop, pre, getModelForClass, modelOptions } from "@typegoose/typegoose";
+import {
+  prop,
+  pre,
+  getModelForClass,
+  modelOptions,
+} from "@typegoose/typegoose";
 import { bannedReasonEnum, userRolesEnum } from "./type";
-import mongoose from "mongoose";
 
 const SALT_ROUNDS = 10;
 
-
 export class BannedSchema {
-    @prop({ enum: bannedReasonEnum, default: bannedReasonEnum.OTHER })
-    reason!: bannedReasonEnum;
+  @prop({ enum: bannedReasonEnum, default: bannedReasonEnum.OTHER })
+  reason!: bannedReasonEnum;
 
-    @prop({ default: Date.now })
-    date!: Date;
+  @prop({ default: Date.now })
+  date!: Date;
 }
 
 @pre<UserClass>("save", async function (next) {
-    if (this.isModified("password")) {
-        this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
-    }
-    this.updatedAt = new Date();
-    next();
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
+  }
+  this.updatedAt = new Date();
+  next();
 })
-
-@modelOptions({ schemaOptions: {
-    collection: 'users',
+@modelOptions({
+  schemaOptions: {
+    collection: "users",
     toJSON: {
-        transform:  (doc, ret) => {
-            delete ret.password;
-            delete ret.__v;
-            delete ret.role;
-            ret.id = ret._id;
-            delete ret._id;
-        }
-    }
-}})
+      transform: (doc, ret) => {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+        delete ret.role;
+        delete ret.password;
+      },
+    },
+  },
+})
 export class UserClass {
-    @prop()
-    public username!: string;
-    
-    @prop()
-    public email?: string;
+  @prop()
+  public username!: string;
 
-    @prop({ unique: true })
-    public phone!: string;
+  @prop()
+  public email?: string;
 
-    @prop()
-    public password!: string;
+  @prop({ unique: true })
+  public phone!: string;
 
-    @prop({ enum: userRolesEnum, default: userRolesEnum.USER })
-    public role!: string;
+  @prop()
+  public password!: string;
 
-    @prop({ default: false })
-    public verified!: boolean;
+  @prop({ enum: userRolesEnum, default: userRolesEnum.USER })
+  public role!: string;
 
-    @prop()
-    banned?: BannedSchema
+  @prop({ default: false })
+  public verified!: boolean;
 
-    @prop({ default: Date.now })
-    public createdAt: Date;
+  @prop()
+  banned?: BannedSchema;
 
-    @prop({ default: Date.now })
-    public updatedAt: Date;
+  @prop({ default: Date.now })
+  public createdAt: Date;
 
-    @prop({ default: Date.now })
-    public lastLogin: Date;
+  @prop({ default: Date.now })
+  public updatedAt: Date;
 
-    comparePassword: (candidatePassword: string) => Promise<boolean>;
+  @prop({ default: Date.now })
+  public lastLogin: Date;
+
+  comparePassword: (candidatePassword: string) => Promise<boolean>;
 }
 
-
-UserClass.prototype.comparePassword = async function (candidatePassword: string) {
-    try {
-        return await bcrypt.compare(candidatePassword, this.password);
-    } catch (err) {
-        return false;
-    }
+UserClass.prototype.comparePassword = async function (
+  candidatePassword: string,
+) {
+  try {
+    return await bcrypt.compare(candidatePassword, this.password);
+  } catch (err) {
+    return false;
+  }
 };
 
 export const UserModel = getModelForClass(UserClass);
