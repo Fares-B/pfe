@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import { prop, pre, getModelForClass, modelOptions } from "@typegoose/typegoose";
 import { bannedReasonEnum, userRolesEnum } from "./type";
+import mongoose from "mongoose";
 
 const SALT_ROUNDS = 10;
 
@@ -21,7 +22,18 @@ export class BannedSchema {
     next();
 })
 
-@modelOptions({ schemaOptions: { collection: 'users' }})
+@modelOptions({ schemaOptions: {
+    collection: 'users',
+    toJSON: {
+        transform:  (doc, ret) => {
+            delete ret.password;
+            delete ret.__v;
+            delete ret.role;
+            ret.id = ret._id;
+            delete ret._id;
+        }
+    }
+}})
 export class UserClass {
     @prop()
     public username!: string;

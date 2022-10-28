@@ -18,6 +18,11 @@ if (process.env.NODE_ENV !== 'production') {
 // connect to db
 import './lib/db';
 
+app.use((req, res, next) => {
+    res.append('Content-Range', 'posts 0-24/319');
+    res.append('Access-Control-Expose-Headers', 'Content-Range');
+    next();
+});
 
 app.get('/', (req, res) => {
     res.send('Hello World!');

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import logger from "../lib/logger";
 import { UserModel } from "../models";
 
 
@@ -18,6 +19,7 @@ export default {
       await user.save();
       res.status(201).json(user);
     } catch (err) {
+      logger.error(err);
       res.status(400).json({ message: "Internal issues" });
     }
   },
