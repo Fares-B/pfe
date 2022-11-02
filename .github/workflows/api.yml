@@ -72,6 +72,8 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.PROJECT_ID_DEV }}
           VERCEL_ORG_ID: ${{ secrets.ORG_ID }}
+          GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
+          GRAFANA_AUTH: ${{ secrets.GRAFANA_AUTH }}
   
   vercel-prod:
     needs: test
@@ -94,5 +96,7 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.PROJECT_ID_PROD }}
           VERCEL_ORG_ID: ${{ secrets.ORG_ID }}
-  
+          GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
+          GRAFANA_AUTH: ${{ secrets.GRAFANA_AUTH }}
+    
       # url: https://pfe-fares-b.vercel.app/
