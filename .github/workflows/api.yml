@@ -37,7 +37,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       MONGODB_CONNECTION_STR: ${{ secrets.MONGODB_CONNECTION_STR_DEV }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET_DEV }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET_DEV }}      
+      GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
+      GRAFANA_AUTH: ${{ secrets.GRAFANA_AUTH }}
+
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 16.x
@@ -50,6 +53,7 @@ jobs:
       - name: run Tests
         working-directory: api
         run: npm run test
+
 
   vercel-dev:
     needs: test
@@ -74,7 +78,7 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.ORG_ID }}
           GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
           GRAFANA_AUTH: ${{ secrets.GRAFANA_AUTH }}
-  
+
   vercel-prod:
     needs: test
     env:
