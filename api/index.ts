@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 
 // import environment variable
 if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
+	dotenv.config();
 }
 
 import app from "./src/app";

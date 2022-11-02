@@ -1,35 +1,31 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
+import { UserToken } from "../interfaces/express";
 
-export interface Token {
-  id: string;
-  phone: string;
-  role: string;
+
+export function createToken(user: UserToken): string {
+	const token = jwt.sign(
+		{
+			id: user._id,
+			phone: user.phone,
+			role: user.role,
+			verified: user.verified,
+		},
+		process.env.JWT_SECRET,
+		{
+			expiresIn: "1y",
+		},
+	);
+	return token;
 }
 
-export function createToken(user: any): string {
-  const token = jwt.sign(
-    {
-      id: user._id,
-      phone: user.phone,
-      role: user.role,
-      verified: user.verified,
-    },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "1y",
-    },
-  );
-  return token;
-}
-
-export function verifyToken(token: string): Promise<Token> {
-  return new Promise((resolve, reject) => {
-    jwt.verify(token, process.env.JWT_SECRET, (err: any, decoded: Token) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(decoded);
-      }
-    });
-  });
+export function verifyToken(token: string): Promise<UserToken> {
+	return new Promise((resolve, reject) => {
+		jwt.verify(token, process.env.JWT_SECRET, (err: any, decoded: UserToken) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(decoded);
+			}
+		});
+	});
 }

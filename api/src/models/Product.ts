@@ -1,19 +1,19 @@
 import {
-  prop,
-  pre,
-  getModelForClass,
-  modelOptions,
+	prop,
+	pre,
+	getModelForClass,
+	modelOptions,
 } from "@typegoose/typegoose";
 import { CommentClass } from "./Comment";
 
 @pre<ProductClass>("save", async function (next) {
-  this.updatedAt = new Date();
-  next();
+	this.updatedAt = new Date();
+	next();
 })
 @modelOptions({ schemaOptions: { collection: "products" } })
 export class ProductClass {
   @prop()
-  public name!: string;
+	public name!: string;
 
   @prop()
   public barcode!: string;

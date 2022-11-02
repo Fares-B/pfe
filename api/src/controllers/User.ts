@@ -1,88 +1,74 @@
 import mongoose from "mongoose";
+import { Request, Response } from "../interfaces/express";
 import logger from "../lib/logger";
 import { UserModel } from "../models";
 
 export default {
-  cget: async (req: any, res: any) => {
-    try {
-      const users = await UserModel.find({ ...req.query });
-      res.json(users);
-    } catch (err) {
-      res.status(500).json({ message: "Internal issues" });
-    }
-  },
+	cget: async (req: Request, res: Response) => {
+		try {
+			const users = await UserModel.find({ ...req.query });
+			res.json(users);
+		} catch (err) {
+			res.status(500).json({ message: "Internal issues" });
+		}
+	},
 
-  post: async (req: any, res: any) => {
-    try {
-      const user = new UserModel({ ...req.body });
-      await user.save();
-      res.status(201).json(user);
-    } catch (err) {
-      logger().error(err);
-      res.status(400).json({ message: "Internal issues" });
-    }
-  },
+	post: async (req: Request, res: Response) => {
+		try {
+			const user = new UserModel({ ...req.body });
+			await user.save();
+			res.status(201).json(user);
+		} catch (err) {
+			logger().error(err);
+			res.status(400).json({ message: "Internal issues" });
+		}
+	},
 
-  get: async (req: any, res: any) => {
-    try {
-      const user = await UserModel.findByIdAndUpdate(req.params.id, {
-        ...req.body,
-      });
-      if (!user) return res.status(403).json({ message: "User not found" });
-      res.status(200).json({
-        _id: user._id,
-        email: user.email,
-        phone: user.phone,
-        username: user.username,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      });
-    } catch (err) {
-      res.status(400).json({ message: "Internal issues" });
-    }
-  },
+	get: async (req: Request, res: Response) => {
+		try {
+			const user = await UserModel.findByIdAndUpdate(req.params.id, {
+				...req.body,
+			});
+      if (!user) throw new Error("User not found");
 
-  put: async (req: any, res: any) => {
-    try {
-      const user = await UserModel.findOneAndUpdate(
-        {
-          _id: new mongoose.Types.ObjectId(req.user.id),
-          banned: null,
-        },
-        { ...req.body },
-      );
+      res.status(200).json(user);
+		} catch (err) {
+      if (err.message) return res.status(400).json({ message: err.message });
+			res.status(400).json({ message: "Internal issues" });
+		}
+	},
 
-      if (user === null) throw new Error("User not found");
+	put: async (req: Request, res: Response) => {
+		try {
+			const user = await UserModel.findOneAndUpdate(
+				{
+					_id: new mongoose.Types.ObjectId(req.user.id),
+				},
+				{ ...req.body },
+			);
 
-      await user.save();
-      res.json({
-        user: {
-          _id: user._id,
-          username: user.username,
-          phone: user.phone,
-          email: user.email,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt,
-        },
-      });
-    } catch (err) {
-      res.status(500).json({ message: "Internal issues" });
-    }
-  },
+			if (user === null) throw new Error("User not found");
 
-  // delete: async (req, res) => {
-  //   try {
-  //     const user = await UserModel.findOne({
-  //       _id: mongoose.Types.ObjectId(req.params.id),
-  //       userType: req.user.userType,
-  //       deleted: false,
-  //     });
-  //     if (user === null) throw new Error('User not found');
-  //     user.deleted = true;
-  //     await order.save();
-  //     res.status(204).end();
-  //   } catch (err) {
-  //     res.status(500).json({ message: err.message });
-  //   }
-  // },
+			await user.save();
+			res.json(user);
+		} catch (err) {
+			res.status(500).json({ message: "Internal issues" });
+		}
+	},
+
+	// delete: async (req, res) => {
+	//   try {
+	//     const user = await UserModel.findOne({
+	//       _id: mongoose.Types.ObjectId(req.params.id),
+	//       userType: req.user.userType,
+	//       deleted: false,
+	//     });
+	//     if (user === null) throw new Error('User not found');
+	//     user.deleted = true;
+	//     await order.save();
+	//     res.status(204).end();
+	//   } catch (err) {
+	//     res.status(500).json({ message: err.message });
+	//   }
+	// },
 };

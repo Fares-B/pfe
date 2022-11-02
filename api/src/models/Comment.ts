@@ -4,7 +4,7 @@ import { SubUserClass } from "./subdoc/SubUser";
 @modelOptions({ schemaOptions: { _id: false } })
 export class CommentClass {
   @prop()
-  public content!: string;
+	public content!: string;
 
   @prop()
   public user!: SubUserClass;

@@ -8,33 +8,33 @@ const router = express.Router();
 router.get("/", ProductController.cget);
 
 router.post(
-  "/",
-  middlewares.authorization({ role: userRolesEnum.MODERATOR }),
-  ProductController.post,
+	"/",
+	middlewares.authorization({ role: userRolesEnum.MODERATOR }),
+	ProductController.post,
 );
 
 router.get(
-  "/:id",
-  // middlewares.authorization({ verified: false }),
-  ProductController.get,
+	"/:id",
+	// middlewares.authorization({ verified: false }),
+	ProductController.get,
 );
 
 router.get(
-  "/barcode/:barcode",
-  middlewares.authorization({ verified: false }),
-  ProductController.get,
+	"/barcode/:barcode",
+	middlewares.authorization({ verified: false }),
+	ProductController.get,
 );
 
 router.put(
-  "/:id",
-  middlewares.authorization({ role: userRolesEnum.MODERATOR }),
-  ProductController.put,
+	"/:id",
+	middlewares.authorization({ role: userRolesEnum.MODERATOR }),
+	ProductController.put,
 );
 
 router.delete(
-  "/:id",
-  middlewares.authorization({ role: userRolesEnum.MODERATOR }),
-  ProductController.delete,
+	"/:id",
+	middlewares.authorization({ role: userRolesEnum.MODERATOR }),
+	ProductController.delete,
 );
 
 export default router;

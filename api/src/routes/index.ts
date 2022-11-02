@@ -4,8 +4,8 @@ import BanRoutes from "./Ban";
 import ProductRoutes from "./Product";
 
 export default {
-  UserRoutes,
-  SecurityRoutes,
-  BanRoutes,
-  ProductRoutes,
+	UserRoutes,
+	SecurityRoutes,
+	BanRoutes,
+	ProductRoutes,
 };
