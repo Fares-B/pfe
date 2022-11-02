@@ -4,7 +4,8 @@ import {
 	getModelForClass,
 	modelOptions,
 } from "@typegoose/typegoose";
-import { CommentClass } from "./Comment";
+import CommentClass from "./Comment";
+
 
 @pre<ProductClass>("save", async function (next) {
 	this.updatedAt = new Date();

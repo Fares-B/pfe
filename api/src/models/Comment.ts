@@ -15,3 +15,5 @@ export class CommentClass {
   @prop({ default: Date.now })
   public createdAt: Date;
 }
+
+export default CommentClass;

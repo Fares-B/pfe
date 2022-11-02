@@ -9,20 +9,6 @@ import "./lib/db";
 
 const app = express();
 
-interface User {
-	id: string;
-	phone: string;
-	verified: boolean;
-	role: userRolesEnum;
-}
-
-declare global {
-  namespace Express {
-    interface Request {
-      context: User;
-    }
-  }
-}
 // middlewares cors and json
 app.use(express.json());
 app.use(cors());
@@ -38,7 +24,6 @@ app.use((req, res, next) => {
 	next();
 });
 
-logger().info("Starting API");
 
 app.get("/", (req, res) => {
 	// logger().

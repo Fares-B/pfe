@@ -5,7 +5,9 @@ let loggerLocal: Logger;
 
 const initializeLogger = () => {
 	if (loggerLocal) return;
-
+  console.log("initializeLogger");
+  console.log("Grafana Loki URL: ", process.env.GRAFANA_URL);
+  console.log("Grafana Loki Auth: ", process.env.GRAFANA_AUTH);
 	loggerLocal = createLogger({
 		transports: [
 			new LokiTransport({
