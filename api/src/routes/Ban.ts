@@ -1,5 +1,5 @@
 import { BanController } from "../controllers";
-import express from 'express';
+import express from "express";
 
 const router = express.Router();
 
