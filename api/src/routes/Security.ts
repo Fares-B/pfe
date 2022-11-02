@@ -10,7 +10,6 @@ router.post("/login", async (req, res) => {
 	try {
 		const user: UserClass = await UserModel.findOne({
 			phone: req.body.phone,
-			banned: null,
 		});
 
 		if (user && (await user.comparePassword(req.body.password))) {
