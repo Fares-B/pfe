@@ -5,9 +5,6 @@ let loggerLocal: Logger;
 
 const initializeLogger = () => {
 	if (loggerLocal) return;
-  console.log("initializeLogger");
-  console.log("Grafana Loki URL: ", process.env.GRAFANA_URL);
-  console.log("Grafana Loki Auth: ", process.env.GRAFANA_AUTH);
 	loggerLocal = createLogger({
 		transports: [
 			new LokiTransport({
@@ -41,10 +38,6 @@ export const logResponseTime = (req: any, res: any, time: any) => {
 	const url = req.url;
 	const status = res.statusCode;
 
-	console.log("------------------");
-	console.log("status", status, "method", method, "url", url, "time", time);
-	console.log("------------------");
-
 	logger.info({
 		message: `method=${method} url=${url} status=${status} duration=${time}ms`,
 		labels: { origin: "api" },
@@ -57,10 +50,6 @@ export const logError = (err: any, req: any, res: any, next: any) => {
 	const status = res.statusCode;
 
 	const logger = getLogger();
-
-	console.log("------------------");
-	console.log("err", err);
-	console.log("------------------");
 
 	logger.error({
 		message: `method=${method} url=${url} status=${status} error=${err.stack}`,

@@ -14,12 +14,21 @@ export default {
 	},
 
 	post: async (req: Request, res: Response) => {
+		const urlPath = req.originalUrl;
 		try {
 			const user = new UserModel({ ...req.body });
 			await user.save();
+			if(urlPath === "/register") logger().info({
+				message: `User ${user._id} registered`,
+				labels: { user: "register" },
+			});	
 			res.status(201).json(user);
 		} catch (err) {
-			logger().error(err);
+			// logger().error(err);
+			if(urlPath === "/register") logger().error({
+				message: `User ${req.body.phone} failed to register`,
+				labels: { user: "register" },
+			});
 			res.status(400).json({ message: "Internal issues" });
 		}
 	},
