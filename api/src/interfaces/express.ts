@@ -1,6 +1,5 @@
 import express from "express";
 
-
 export interface UserToken {
   id?: string;
   _id?: string;

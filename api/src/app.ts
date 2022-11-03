@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 
 // import environment variable
 if (process.env.NODE_ENV !== "production") {
-	dotenv.config();
+  dotenv.config();
 }
 import express from "express";
 import cors from "cors";
@@ -25,14 +25,13 @@ app.use(cors());
 
 // middlewares add headers
 app.use((req, res, next) => {
-	res.append("Content-Range", "posts 0-24/319");
-	res.append("Access-Control-Expose-Headers", "Content-Range");
-	next();
+  res.append("Content-Range", "posts 0-24/319");
+  res.append("Access-Control-Expose-Headers", "Content-Range");
+  next();
 });
 
-
 app.get("/", (req, res) => {
-	res.send("Hello World!");
+  res.send("Hello World!");
 });
 
 app.use("/users", middlewares.authentication, routes.UserRoutes);
@@ -40,10 +39,10 @@ app.use("/users", middlewares.authentication, routes.UserRoutes);
 app.use("/products", middlewares.authentication, routes.ProductRoutes);
 
 app.use(
-	"/bans",
-	middlewares.authentication,
-	middlewares.authorization({ role: userRolesEnum.MODERATOR }),
-	routes.BanRoutes,
+  "/bans",
+  middlewares.authentication,
+  middlewares.authorization({ role: userRolesEnum.MODERATOR }),
+  routes.BanRoutes,
 );
 
 app.use("/", routes.SecurityRoutes);
