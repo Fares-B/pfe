@@ -1,40 +1,34 @@
 import express from "express";
-import { ProductController } from "../controllers";
+import { ReportController } from "../controllers";
 import middlewares from "../middlewares";
 import { userRolesEnum } from "../models/type";
 
 const router = express.Router();
 
-router.get("/", ProductController.cget);
-
-router.post(
+router.get(
 	"/",
 	middlewares.authorization({ role: userRolesEnum.MODERATOR }),
-	ProductController.post,
+	ReportController.cget,
 );
+
+router.post("/", ReportController.post);
 
 router.get(
-	"/:id",
-	// middlewares.authorization({ verified: false }),
-	ProductController.get,
-);
-
-router.get(
-	"/barcode/:barcode",
-	middlewares.authorization({ verified: false }),
-	ProductController.get,
-);
-
-router.put(
 	"/:id",
 	middlewares.authorization({ role: userRolesEnum.MODERATOR }),
-	ProductController.put,
+	ReportController.get,
 );
+
+// router.put(
+//   "/:id",
+//   middlewares.authorization({ role: userRolesEnum.MODERATOR }),
+//   ReportController.put,
+// );
 
 router.delete(
 	"/:id",
 	middlewares.authorization({ role: userRolesEnum.MODERATOR }),
-	ProductController.delete,
+	ReportController.delete,
 );
 
 export default router;

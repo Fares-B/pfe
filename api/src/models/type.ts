@@ -1,13 +1,13 @@
 const USER_ROLE = {
-  ADMIN: "admin",
-  MODERATOR: "moderator",
-  USER: "user",
+	ADMIN: "admin",
+	MODERATOR: "moderator",
+	USER: "user",
 };
 
 const BANNED_REASON = {
-  SPAM: "spam",
-  HARASSMENT: "harassment",
-  OTHER: "other",
+	SPAM: "spam",
+	HARASSMENT: "harassment",
+	OTHER: "other",
 };
 
 enum userRolesEnum {

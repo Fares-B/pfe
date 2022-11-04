@@ -1,9 +1,9 @@
 import bcrypt from "bcrypt";
 import {
-  prop,
-  pre,
-  getModelForClass,
-  modelOptions,
+	prop,
+	pre,
+	getModelForClass,
+	modelOptions,
 } from "@typegoose/typegoose";
 import { bannedReasonEnum, userRolesEnum } from "./type";
 
@@ -11,36 +11,35 @@ const SALT_ROUNDS = 10;
 
 export class BannedSchema {
   @prop({ enum: bannedReasonEnum, default: bannedReasonEnum.OTHER })
-  reason!: bannedReasonEnum;
+  	reason!: bannedReasonEnum;
 
   @prop({ default: Date.now })
-  date!: Date;
+  	date!: Date;
 }
 
 @pre<UserClass>("save", async function (next) {
-  if (this.isModified("password")) {
-    this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
-  }
-  this.updatedAt = new Date();
-  next();
+	if (this.isModified("password")) {
+		this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
+	}
+	this.updatedAt = new Date();
+	next();
 })
 @modelOptions({
-  schemaOptions: {
-    collection: "users",
-    toJSON: {
-      transform: (doc, ret) => {
-        ret.id = ret._id;
-        delete ret._id;
-        delete ret.__v;
-        delete ret.role;
-        delete ret.password;
-      },
-    },
-  },
+	schemaOptions: {
+		collection: "users",
+		toJSON: {
+			transform: (doc, ret) => {
+				ret.id = ret._id;
+				delete ret._id;
+				delete ret.__v;
+				delete ret.password;
+			},
+		},
+	},
 })
 export class UserClass {
   @prop()
-  public username!: string;
+	public username!: string;
 
   @prop()
   public email?: string;
@@ -58,7 +57,7 @@ export class UserClass {
   public verified!: boolean;
 
   @prop()
-  banned?: BannedSchema;
+  	banned?: BannedSchema;
 
   @prop({ default: Date.now })
   public createdAt: Date;
@@ -73,13 +72,13 @@ export class UserClass {
 }
 
 UserClass.prototype.comparePassword = async function (
-  candidatePassword: string,
+	candidatePassword: string,
 ) {
-  try {
-    return await bcrypt.compare(candidatePassword, this.password);
-  } catch (err) {
-    return false;
-  }
+	try {
+		return await bcrypt.compare(candidatePassword, this.password);
+	} catch (err) {
+		return false;
+	}
 };
 
 export const UserModel = getModelForClass(UserClass);

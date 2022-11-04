@@ -5,14 +5,14 @@ import { SubUserClass } from "./SubUser";
 @modelOptions({ schemaOptions: { _id: false } })
 export class SubReportClass {
   @prop()
-  public user!: SubUserClass;
+	public user!: SubUserClass;
 
   @prop({ enum: bannedReasonEnum })
   public why!: bannedReasonEnum;
 
   @prop({ default: false })
-  public resolved: boolean;
+  public resolved!: boolean;
 
   @prop({ default: Date.now })
-  public createdAt: Date;
+  public createdAt!: Date;
 }
