@@ -1,15 +1,39 @@
-import Private from "./Private";
-import Public from "./Public";
-import { HashRouter as Router } from "react-router-dom";
+import { Admin, Resource } from "react-admin";
+import { Person, List as ListIcon } from '@mui/icons-material';
+import authProvider from "../providers/auth";
+import dataProvider from "../providers/data";
+import { Users, Products } from "../ressources";
+import { ReactQueryDevtools } from 'react-query/devtools';
 
-export default function Layout() {
-  const token = localStorage.getItem("token");
+const MyLayout = (props:any) => <div>
+  {props.children}
+  <ReactQueryDevtools initialIsOpen={true} />
+</div>;
 
+
+
+const Layout: React.FC = () => {
   return (
-    <div style={{ height: "100vh" }}>
-      <Router>
-        {token ? <Private token={token} /> : <Public />}
-      </Router>
-    </div>
+    <Admin dataProvider={dataProvider} authProvider={authProvider} /* layout={MyLayout} */>
+      <Resource
+        name="users"
+        list={Users.list}
+        show={Users.show}
+        edit={Users.edit}
+        icon={Person}
+        recordRepresentation={record => record.username}
+      />
+      <Resource
+        name="products"
+        list={Products.list}
+        show={Products.show}
+        edit={Products.edit}
+        create={Products.create}
+        icon={ListIcon}
+        recordRepresentation={record => record.name}
+      />
+    </Admin>
   );
-}
+};
+
+export default Layout;
