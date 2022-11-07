@@ -11,8 +11,8 @@ export class SubReportClass {
   public why!: bannedReasonEnum;
 
   @prop({ default: false })
-  public resolved: boolean;
+  public resolved!: boolean;
 
   @prop({ default: Date.now })
-  public createdAt: Date;
+  public createdAt!: Date;
 }

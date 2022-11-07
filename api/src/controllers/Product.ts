@@ -3,12 +3,19 @@ import { Request, Response } from "../interfaces/express";
 import logger from "../lib/logger";
 import { sendRateToArduino } from "../middlewares/qrcode";
 import { ProductModel } from "../models";
+import { USER_ROLE } from "../models/type";
 
 export default {
 	cget: async (req: Request, res: Response) => {
+		// if moderator, return all products else return only products with deleted = false
+		const options =
+      req.user.role === USER_ROLE.MODERATOR ? {} : { deleted: false };
 		try {
-			const products = await ProductModel.find({ ...req.query });
-			res.json(products);
+			const products = await ProductModel.find({ ...req.query, ...options });
+			res.json({
+				data: products,
+				total: products.length,
+			});
 		} catch (err) {
 			res.status(500).json({ message: "Internal issues" });
 		}
@@ -18,7 +25,9 @@ export default {
 		try {
 			const product = new ProductModel({ ...req.body });
 			await product.save();
-			res.status(201).json(product);
+			res.status(201).json({
+				data: product,
+			});
 		} catch (err) {
 			res.status(400).json({ message: "Internal issues" });
 		}
@@ -28,10 +37,11 @@ export default {
 		const { id, barcode = null } = req.params;
 		try {
 			let product = null;
+			// find and populate comments
 			if (barcode) {
-				product = await ProductModel.findOne({ barcode });
+				product = await ProductModel.findOne({ barcode }).populate("comments");
 			} else {
-				product = await ProductModel.findById(id);
+				product = await ProductModel.findById(id).populate("comments");
 			}
 			if (!product)
 				return res.status(403).json({ message: "Product not found" });
@@ -55,7 +65,9 @@ export default {
 			if (product === null) throw new Error("Product not found");
 
 			await product.save();
-			res.json(product);
+			res.json({
+				data: product,
+			});
 		} catch (err) {
 			res.status(400).json({ message: "Internal issues" });
 		}

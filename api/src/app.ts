@@ -1,3 +1,9 @@
+import dotenv from "dotenv";
+
+// import environment variable
+if (process.env.NODE_ENV !== "production") {
+	dotenv.config();
+}
 import express from "express";
 import cors from "cors";
 // import responseTime from "response-time";
@@ -24,18 +30,17 @@ app.use((req, res, next) => {
 	next();
 });
 
-
 app.get("/", (req, res) => {
-	// logger().
-	logger().error(
-		"Database connection string is not defined [MONGODB_CONNECTION_STR] in .env file",
-	);
 	res.send("Hello World!");
 });
 
 app.use("/users", middlewares.authentication, routes.UserRoutes);
 
 app.use("/products", middlewares.authentication, routes.ProductRoutes);
+
+app.use("/comments", middlewares.authentication, routes.CommentRoutes);
+
+app.use("/reports", middlewares.authentication, routes.ReportRoutes);
 
 app.use(
 	"/bans",

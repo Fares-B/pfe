@@ -32,7 +32,6 @@ export class BannedSchema {
 				ret.id = ret._id;
 				delete ret._id;
 				delete ret.__v;
-				delete ret.role;
 				delete ret.password;
 			},
 		},

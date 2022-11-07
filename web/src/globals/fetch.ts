@@ -33,7 +33,7 @@ const query = async (path: string, method: medthodType, body: any = null): Promi
 // PUBLIC
 export const loginRequest = async (body: LoginProps) => query("/login", "POST", body);
 
-export const registerRequest = async (body: RegisterProps) => query("/register", "POST", body);
+// export const registerRequest = async (body: RegisterProps) => query("/register", "POST", body);
 
 // PRIVATE
 

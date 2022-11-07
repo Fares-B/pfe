@@ -10,5 +10,5 @@ export class SubUserClass {
   public username!: string;
 
   @prop()
-  public image: string;
+  public image?: string;
 }

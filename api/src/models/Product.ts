@@ -3,13 +3,26 @@ import {
 	pre,
 	getModelForClass,
 	modelOptions,
+	Ref,
 } from "@typegoose/typegoose";
-import CommentClass from "./Comment";
-
+import { CommentClass } from "./Comment";
+import { SubReportClass } from "./subdoc/SubReport";
 
 @pre<ProductClass>("save", async function (next) {
 	this.updatedAt = new Date();
 	next();
+})
+@modelOptions({
+	schemaOptions: {
+		collection: "products",
+		toJSON: {
+			transform: (doc, ret) => {
+				ret.id = ret._id;
+				delete ret._id;
+				delete ret.__v;
+			},
+		},
+	},
 })
 @modelOptions({ schemaOptions: { collection: "products" } })
 export class ProductClass {
@@ -28,8 +41,8 @@ export class ProductClass {
   @prop()
   public image: string;
 
-  @prop({ default: [] })
-  public comments!: CommentClass[];
+  @prop({ ref: () => CommentClass }) // for an array of references
+  public comments: Ref<CommentClass>[];
 
   @prop({ default: Date.now })
   public createdAt: Date;
@@ -39,6 +52,12 @@ export class ProductClass {
 
   @prop({ default: false })
   public deleted: boolean;
+
+  @prop({ default: false })
+  public visible: boolean;
+
+  @prop()
+  public reports: SubReportClass[];
 }
 
 export const ProductModel = getModelForClass(ProductClass);

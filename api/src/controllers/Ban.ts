@@ -10,7 +10,11 @@ export default {
 				...req.query,
 				banned: { $ne: null },
 			});
-			res.status(200).json(users);
+
+			res.json({
+				data: users,
+				total: users.length,
+			});
 		} catch (err) {
 			res.status(400).json({ message: "Internal issues" });
 		}

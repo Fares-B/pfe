@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import { UserToken } from "../interfaces/express";
 
-
 export function createToken(user: UserToken): string {
 	const token = jwt.sign(
 		{
@@ -20,12 +19,16 @@ export function createToken(user: UserToken): string {
 
 export function verifyToken(token: string): Promise<UserToken> {
 	return new Promise((resolve, reject) => {
-		jwt.verify(token, process.env.JWT_SECRET, (err: any, decoded: UserToken) => {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(decoded);
-			}
-		});
+		jwt.verify(
+			token,
+			process.env.JWT_SECRET,
+			(err: any, decoded: UserToken) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(decoded);
+				}
+			},
+		);
 	});
 }
