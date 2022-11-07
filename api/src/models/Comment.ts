@@ -3,20 +3,16 @@ import {
 	modelOptions,
 	getModelForClass,
 	pre,
-	Ref,
 } from "@typegoose/typegoose";
 import mongoose from "mongoose";
-import { ProductClass } from "./Product";
 import { SubReportClass } from "./subdoc/SubReport";
 import { SubUserClass } from "./subdoc/SubUser";
 
-@pre<CommentClass>("save", async function (next) {
-	this.updatedAt = new Date();
-	next();
-})
+
 @modelOptions({
 	schemaOptions: {
 		collection: "comments",
+		timestamps: true,
 		toJSON: {
 			transform: (doc, ret) => {
 				ret.id = ret._id;
@@ -26,7 +22,6 @@ import { SubUserClass } from "./subdoc/SubUser";
 		},
 	},
 })
-@modelOptions({ schemaOptions: { collection: "comments" } })
 export class CommentClass {
   @prop()
 	public content!: string;
@@ -40,11 +35,11 @@ export class CommentClass {
   @prop()
   public reports: SubReportClass[];
 
-  @prop({ default: Date.now })
-  public createdAt: Date;
+	@prop({ default: 0 })
+	public rate!: number;
 
-  @prop({ default: Date.now })
-  public updatedAt: Date;
+	@prop({ default: 0 })
+	public userRated!: number;
 }
 
 export const CommentModel = getModelForClass(CommentClass);

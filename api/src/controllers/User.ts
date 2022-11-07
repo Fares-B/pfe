@@ -21,7 +21,6 @@ export default {
 			res.status(500).json({ message: "Internal issues" });
 		}
 	},
-
 	post: async (req: Request, res: Response) => {
 		const urlPath = req.originalUrl;
 		try {
@@ -43,7 +42,6 @@ export default {
 			res.status(400).json({ message: "Internal issues" });
 		}
 	},
-
 	get: async (req: Request, res: Response) => {
 		try {
 			let userId = req.params.id;
@@ -59,7 +57,6 @@ export default {
 			res.status(400).json({ message: "Internal issues" });
 		}
 	},
-
 	put: async (req: Request, res: Response) => {
 		try {
 			const user = await UserModel.findOneAndUpdate(
@@ -79,7 +76,6 @@ export default {
 			res.status(500).json({ message: "Internal issues" });
 		}
 	},
-
 	// delete: async (req, res) => {
 	//   try {
 	//     const user = await UserModel.findOne({

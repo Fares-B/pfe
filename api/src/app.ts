@@ -49,6 +49,12 @@ app.use(
 	routes.BanRoutes,
 );
 
+app.use(
+	"/rates",
+	middlewares.authentication,
+	routes.RateRoutes,
+);
+
 app.use("/", routes.SecurityRoutes);
 
 export default app;

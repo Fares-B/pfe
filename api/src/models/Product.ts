@@ -8,6 +8,7 @@ import {
 import { CommentClass } from "./Comment";
 import { SubReportClass } from "./subdoc/SubReport";
 
+<<<<<<< Updated upstream
 @pre<ProductClass>("save", async function (next) {
 	this.updatedAt = new Date();
 	next();
@@ -25,6 +26,22 @@ import { SubReportClass } from "./subdoc/SubReport";
 	},
 })
 @modelOptions({ schemaOptions: { collection: "products" } })
+=======
+
+@modelOptions({
+	schemaOptions: {
+		collection: "products",
+    timestamps: true,
+		toJSON: {
+			transform: (doc, ret) => {
+				ret.id = ret._id;
+				delete ret._id;
+				delete ret.__v;
+			},
+		},
+	},
+})
+>>>>>>> Stashed changes
 export class ProductClass {
   @prop()
 	public name!: string;
@@ -43,12 +60,6 @@ export class ProductClass {
 
   @prop({ ref: () => CommentClass }) // for an array of references
   public comments: Ref<CommentClass>[];
-
-  @prop({ default: Date.now })
-  public createdAt: Date;
-
-  @prop({ default: Date.now })
-  public updatedAt: Date;
 
   @prop({ default: false })
   public deleted: boolean;
