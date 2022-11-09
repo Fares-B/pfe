@@ -1,6 +1,5 @@
 import {
 	prop,
-	pre,
 	getModelForClass,
 	modelOptions,
 	Ref,
@@ -8,25 +7,6 @@ import {
 import { CommentClass } from "./Comment";
 import { SubReportClass } from "./subdoc/SubReport";
 
-<<<<<<< Updated upstream
-@pre<ProductClass>("save", async function (next) {
-	this.updatedAt = new Date();
-	next();
-})
-@modelOptions({
-	schemaOptions: {
-		collection: "products",
-		toJSON: {
-			transform: (doc, ret) => {
-				ret.id = ret._id;
-				delete ret._id;
-				delete ret.__v;
-			},
-		},
-	},
-})
-@modelOptions({ schemaOptions: { collection: "products" } })
-=======
 
 @modelOptions({
 	schemaOptions: {
@@ -41,7 +21,6 @@ import { SubReportClass } from "./subdoc/SubReport";
 		},
 	},
 })
->>>>>>> Stashed changes
 export class ProductClass {
   @prop()
 	public name!: string;

@@ -113,7 +113,7 @@ export default {
             _id: _rate.commentId,
             "user.id": { $ne: new mongoose.Types.ObjectId(req.user.id) },
           },
-          { $inc: { rate: nextRate } },
+          { $inc: { rate: nextRate * 2 } },
           { session },
         );
         if (!_comment) throw new Error("Comment not found or you can't rate your comment");

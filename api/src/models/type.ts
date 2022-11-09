@@ -1,3 +1,5 @@
+import { SubUserClass } from "./subdoc/SubUser";
+
 const USER_ROLE = {
 	ADMIN: "admin",
 	MODERATOR: "moderator",
@@ -22,4 +24,10 @@ enum bannedReasonEnum {
   OTHER = "other",
 }
 
-export { userRolesEnum, bannedReasonEnum, USER_ROLE, BANNED_REASON };
+interface ReportType {
+  user: SubUserClass;
+  why: bannedReasonEnum;
+  resolved: boolean;
+}
+
+export { userRolesEnum, bannedReasonEnum, ReportType, USER_ROLE, BANNED_REASON };

@@ -2,21 +2,45 @@ import mongoose from "mongoose";
 import logger from "../lib/logger";
 import { Request, Response } from "../interfaces/express";
 import { ProductModel, CommentModel, UserModel } from "../models";
-import { bannedReasonEnum } from "../models/type";
+import { bannedReasonEnum, ReportType } from "../models/type";
 
-function getReports(docs: any[], type: string) {
+// next feature: add report min query param
+const REPORT_MIN = 1;
+
+function getReports(docs: any[], type: string, reportMin: number = REPORT_MIN) {
 	const datas = [];
-	docs.map((doc) => {
-		doc.reports.map((report) => {
-			datas.push({
-				id: doc._id,
-				type,
-				why: report.why,
-				by: report.user.id,
-				createdAt: report.createdAt,
-			});
-		});
-	});
+	const doc_reports = docs.filter((doc) => doc.reports.map((r: ReportType) => r.resolved === false).length >= reportMin);
+
+	for (const doc of doc_reports) {
+		let item: any = {
+			id: doc._id,
+			type,
+			reports: [],
+			content: "",
+		};
+		if(type === "comment"|| type === "user") {
+			item.user = doc.user;
+		}
+		if(type === "user") {
+			item.content = doc.user.username;
+		}
+		if(type === "comment") {
+			item.content = doc.content;
+		}
+		if(type === "product") {
+			item.content = doc.name;
+		}
+		for (const report of doc.reports) {
+			if (report.resolved === false) {
+				item.reports.push({
+					why: report.why,
+					by: report.by,
+					createdAt: report.createdAt,
+				});
+			}
+		}
+		datas.push(item);
+	}
 	return datas;
 }
 
@@ -36,7 +60,7 @@ export default {
 				filter._id = new mongoose.Types.ObjectId(id);
 			if (userId !== null && typeof userId === "string")
 				filter["reports.user.id"] = new mongoose.Types.ObjectId(userId);
-			console.log(filter);
+
 			const aggregate = [
 				{ $match: filter },
 				// { $unwind: "" },
