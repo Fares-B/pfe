@@ -2,7 +2,12 @@ import { prop, modelOptions } from "@typegoose/typegoose";
 import { bannedReasonEnum } from "../type";
 import { SubUserClass } from "./SubUser";
 
-@modelOptions({ schemaOptions: { _id: false } })
+@modelOptions({
+  schemaOptions: {
+    _id: false,
+    timestamps: true,
+  }
+})
 export class SubReportClass {
   @prop()
 	public user!: SubUserClass;
@@ -12,7 +17,4 @@ export class SubReportClass {
 
   @prop({ default: false })
   public resolved!: boolean;
-
-  @prop({ default: Date.now })
-  public createdAt!: Date;
 }

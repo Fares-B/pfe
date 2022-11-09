@@ -3,6 +3,8 @@ import BanController from "./Ban";
 import ProductController from "./Product";
 import CommentController from "./Comment";
 import ReportController from "./Report";
+import RateController from "./Rate";
+
 
 export {
 	UserController,
@@ -10,4 +12,5 @@ export {
 	ProductController,
 	CommentController,
 	ReportController,
+	RateController,
 };

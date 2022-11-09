@@ -4,6 +4,8 @@ import BanRoutes from "./Ban";
 import ProductRoutes from "./Product";
 import CommentRoutes from "./Comment";
 import ReportRoutes from "./Report";
+import RateRoutes from "./Rate";
+
 
 export default {
 	UserRoutes,
@@ -12,4 +14,5 @@ export default {
 	ProductRoutes,
 	CommentRoutes,
 	ReportRoutes,
+	RateRoutes,
 };

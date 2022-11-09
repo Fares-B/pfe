@@ -9,6 +9,7 @@ import { bannedReasonEnum, userRolesEnum } from "./type";
 
 const SALT_ROUNDS = 10;
 
+@modelOptions({ schemaOptions: { _id: null } })
 export class BannedSchema {
   @prop({ enum: bannedReasonEnum, default: bannedReasonEnum.OTHER })
   	reason!: bannedReasonEnum;
@@ -21,12 +22,12 @@ export class BannedSchema {
 	if (this.isModified("password")) {
 		this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
 	}
-	this.updatedAt = new Date();
 	next();
 })
 @modelOptions({
 	schemaOptions: {
 		collection: "users",
+		timestamps: true,
 		toJSON: {
 			transform: (doc, ret) => {
 				ret.id = ret._id;
@@ -50,6 +51,9 @@ export class UserClass {
   @prop()
   public password!: string;
 
+	@prop()
+	public image!: string;
+
   @prop({ enum: userRolesEnum, default: userRolesEnum.USER })
   public role!: string;
 
@@ -57,13 +61,7 @@ export class UserClass {
   public verified!: boolean;
 
   @prop()
-  	banned?: BannedSchema;
-
-  @prop({ default: Date.now })
-  public createdAt: Date;
-
-  @prop({ default: Date.now })
-  public updatedAt: Date;
+  public banned?: BannedSchema;
 
   @prop({ default: Date.now })
   public lastLogin: Date;
