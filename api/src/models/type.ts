@@ -24,10 +24,23 @@ enum bannedReasonEnum {
   OTHER = "other",
 }
 
+enum docTypeEnum {
+  PRODUCT = "product",
+  COMMENT = "comment",
+  USER = "user",
+}
+
 interface ReportType {
   user: SubUserClass;
   why: bannedReasonEnum;
   resolved: boolean;
 }
 
-export { userRolesEnum, bannedReasonEnum, ReportType, USER_ROLE, BANNED_REASON };
+export {
+  userRolesEnum,
+  bannedReasonEnum,
+  docTypeEnum,
+  ReportType,
+  USER_ROLE,
+  BANNED_REASON
+};

@@ -5,7 +5,7 @@ import {
 	Ref,
 } from "@typegoose/typegoose";
 import { CommentClass } from "./Comment";
-import { SubReportClass } from "./subdoc/SubReport";
+import BannedSchema from "./subdoc/SubBanned";
 
 
 @modelOptions({
@@ -40,14 +40,14 @@ export class ProductClass {
   @prop({ ref: () => CommentClass }) // for an array of references
   public comments: Ref<CommentClass>[];
 
-  @prop({ default: false })
-  public deleted: boolean;
+  @prop({ default: false, description: "if product is deleted by moderation" })
+  public deleted!: boolean;
 
-  @prop({ default: false })
-  public visible: boolean;
+  @prop({ default: false, description: "if true, this product is visible on site" })
+  public visible!: boolean;
 
   @prop()
-  public reports: SubReportClass[];
+  public banned?: BannedSchema;
 }
 
 export const ProductModel = getModelForClass(ProductClass);

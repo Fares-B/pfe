@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get("/", BanController.cget);
 
-router.post("/", BanController.post);
+router.post("/:id", BanController.post);
 
 router.get("/:id", BanController.get);
 

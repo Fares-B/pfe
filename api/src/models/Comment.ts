@@ -2,10 +2,9 @@ import {
 	prop,
 	modelOptions,
 	getModelForClass,
-	pre,
 } from "@typegoose/typegoose";
 import mongoose from "mongoose";
-import { SubReportClass } from "./subdoc/SubReport";
+import BannedSchema from "./subdoc/SubBanned";
 import { SubUserClass } from "./subdoc/SubUser";
 
 
@@ -32,14 +31,17 @@ export class CommentClass {
   @prop({ type: mongoose.Schema.Types.ObjectId, ref: "products" })
   public productId!: mongoose.Schema.Types.ObjectId;
 
-  @prop()
-  public reports: SubReportClass[];
-
 	@prop({ default: 0 })
 	public rate!: number;
 
 	@prop({ default: 0 })
 	public userRated!: number;
+
+	@prop({ default: false, description: "if comment is deleted by user" })
+	public deleted!: boolean;
+
+	@prop()
+	public banned?: BannedSchema;
 }
 
 export const CommentModel = getModelForClass(CommentClass);

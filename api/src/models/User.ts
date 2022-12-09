@@ -6,17 +6,10 @@ import {
 	modelOptions,
 } from "@typegoose/typegoose";
 import { bannedReasonEnum, userRolesEnum } from "./type";
+import BannedSchema from "./subdoc/SubBanned";
 
 const SALT_ROUNDS = 10;
 
-@modelOptions({ schemaOptions: { _id: null } })
-export class BannedSchema {
-  @prop({ enum: bannedReasonEnum, default: bannedReasonEnum.OTHER })
-  	reason!: bannedReasonEnum;
-
-  @prop({ default: Date.now })
-  	date!: Date;
-}
 
 @pre<UserClass>("save", async function (next) {
 	if (this.isModified("password")) {

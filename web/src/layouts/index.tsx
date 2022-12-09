@@ -2,7 +2,7 @@ import { Admin, Resource } from "react-admin";
 import { Person, List as ListIcon } from '@mui/icons-material';
 import authProvider from "../providers/auth";
 import dataProvider from "../providers/data";
-import { Users, Products } from "../ressources";
+import { Users, Products, Reports } from "../ressources";
 import { ReactQueryDevtools } from 'react-query/devtools';
 
 const MyLayout = (props:any) => <div>
@@ -17,6 +17,7 @@ const Layout: React.FC = () => {
     <Admin dataProvider={dataProvider} authProvider={authProvider} /* layout={MyLayout} */>
       <Resource
         name="users"
+        options={{ label: 'Users' }}
         list={Users.list}
         show={Users.show}
         edit={Users.edit}
@@ -25,12 +26,21 @@ const Layout: React.FC = () => {
       />
       <Resource
         name="products"
+        options={{ label: 'Products' }}
         list={Products.list}
         show={Products.show}
         edit={Products.edit}
         create={Products.create}
         icon={ListIcon}
         recordRepresentation={record => record.name}
+      />
+
+      <Resource
+        name="reports"
+        options={{ label: 'Reports' }}
+        list={Reports.list}
+        show={Reports.show}
+        // recordRepresentation={record => `${record.user.username}`}
       />
     </Admin>
   );

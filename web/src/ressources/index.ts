@@ -8,6 +8,9 @@ import ProductsShow from "./products/show";
 import ProductsEdit from "./products/edit";
 import ProductsCreate from "./products/create";
 
+import ReportsList from "./reports/list";
+import ReportsShow from "./reports/show";
+
 
 export const Users = {
   list: UsersList,
@@ -21,4 +24,9 @@ export const Products = {
   show: ProductsShow,
   edit: ProductsEdit,
   create: ProductsCreate,
+};
+
+export const Reports = {
+  list: ReportsList,
+  show: ReportsShow,
 };

@@ -13,7 +13,7 @@ export default {
 	cget: async (req: Request, res: Response) => {
 		// if moderator, return all comments else return only comments with deleted = false
 		const options =
-      req.user.role === USER_ROLE.MODERATOR ? {} : { deleted: false };
+			req.user.role === USER_ROLE.MODERATOR ? {} : { deleted: false, banned: null };
 		try {
 			const comments = await CommentModel.find({ ...req.query, ...options });
 			res.json({

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { Request, Response } from "../interfaces/express";
-import { UserModel } from "../models";
+import db from "../lib/db";
+import { ReportModel, UserModel } from "../models";
 import { bannedReasonEnum } from "../models/type";
 
 export default {
@@ -21,19 +22,65 @@ export default {
 	},
 
 	post: async (req: Request, res: Response) => {
+		const session = await db.startSession();
+
+
 		const reason: bannedReasonEnum | null = req.body.reason;
+		const userId = new mongoose.Types.ObjectId(req.params.id)
 		try {
+			session.startTransaction();
+
 			const user = await UserModel.findOne({
-				_id: new mongoose.Types.ObjectId(req.params.id),
+				_id: userId,
 				banned: null,
-			});
+			}, null, { session });
 			if (user === null || reason === null) throw new Error("User not found");
+			
+			// aggregate find all reports with user id
+			const reports = await ReportModel.aggregate([
+				{
+					$match: {
+						resolved: false,
+
+						// $or: [
+							// { userId: userId },
+							// { commentId: userId },
+						// ],
+					},
+				},
+				// populate with commentId
+				{
+					$lookup: {
+						from: "comments",
+						localField: "commentId",
+						foreignField: "_id",
+						as: "comment",
+					},
+				},
+			], { session });
+
+			// update all reports with user id
+			for (const report of reports) {
+				if (userId.equals(report.userId)) {
+					report.resolved = true;
+				}
+				else if (report.comment.length > 0 && userId.equals(report.comment[0].user.id)) {
+					report.resolved = true;
+				}
+				if (report.resolved) {
+					await ReportModel.updateOne({ _id: report._id }, { resolved: true }, { session });
+				}
+			}
 			user.banned = { reason, date: new Date() };
 			await user.save();
-			res.status(200).json(user);
+			await session.commitTransaction();
+			res.status(201).json({ data: user });
 		} catch (err) {
+			await session.abortTransaction();
+			console.error(err);
 			res.status(400).json({ message: "Internal issues" });
 		}
+		session.endSession();
 	},
 
 	get: async (req: Request, res: Response) => {
