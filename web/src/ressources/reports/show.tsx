@@ -2,7 +2,7 @@ import moment from "moment";
 import { useState } from "react";
 import { Show, SimpleShowLayout, TextField, DateField, useRecordContext, UseRecordContextParams, RaRecord, useGetOne, Confirm, useUpdate, useDataProvider, useRedirect } from "react-admin"
 import { BadgeReason } from "../../components";
-import { ActionReason, ActionReasonItem, CardReason, ListReason } from "./styles";
+import { ActionReason, ActionReasonItem, CardReason, ListReason } from "../../components/Actions";
 
 
 type openProps = "free" | "delete" | "ban" | false;
@@ -25,7 +25,7 @@ function ActionsReport(props: UseRecordContextParams<RaRecord>) {
       await dataProvider
         .create("bans/" + record.user.id, { data: { reason: reason } })
         .then(() => {
-          redirect("/bans");
+          redirect("/reports");
         });
     }
     else {

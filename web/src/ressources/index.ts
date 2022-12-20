@@ -11,6 +11,9 @@ import ProductsCreate from "./products/create";
 import ReportsList from "./reports/list";
 import ReportsShow from "./reports/show";
 
+import BansList from "./bans/list";
+import BansShow from "./bans/show";
+
 
 export const Users = {
   list: UsersList,
@@ -29,4 +32,9 @@ export const Products = {
 export const Reports = {
   list: ReportsList,
   show: ReportsShow,
+};
+
+export const Bans = {
+  list: BansList,
+  show: BansShow,
 };

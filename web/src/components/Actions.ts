@@ -1,6 +1,6 @@
 import { ShowButtonProps } from "react-admin";
 import styled from "styled-components";
-import colors from "../../assets/colors";
+import colors from "../assets/colors";
 
 // List
 

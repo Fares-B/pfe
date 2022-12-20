@@ -27,7 +27,10 @@ const data = (apiUrl: string) => {
       //   sort: params.sort,
       //   // filter: filters,
       // };
-      const queries = `sort=${params.sort.field}&_order=${params.sort.order}`; // 
+      let queries = `sort=${params.sort.field}&_order=${params.sort.order}`;
+      if(params.filter) {
+        queries = `${queries}&${Object.keys(params.filter).map(key => `${key}=${params.filter[key]}`).join('&')}`;
+      }
       const url = `${apiUrl}/${resource}?${queries}`;
       const { headers, json } = await httpClient(url);
       return json;
