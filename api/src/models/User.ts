@@ -10,7 +10,6 @@ import BannedSchema from "./subdoc/SubBanned";
 
 const SALT_ROUNDS = 10;
 
-
 @pre<UserClass>("save", async function (next) {
 	if (this.isModified("password")) {
 		this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
@@ -55,6 +54,10 @@ export class UserClass {
 
   @prop()
   public banned?: BannedSchema;
+
+	// all ban
+	@prop()
+	public allBans?: Array<BannedSchema>;
 
   @prop({ default: Date.now })
   public lastLogin: Date;

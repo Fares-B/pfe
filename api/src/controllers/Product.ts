@@ -36,17 +36,26 @@ export default {
 	get: async (req: Request, res: Response) => {
 		const { id, barcode = null } = req.params;
 		try {
+			// product_name_fr
+			// quantity
+			// brands
+
+			// selected_images.front.display.fr
+			// selected_images.front.thumb.fr
 			let product = null;
 			// find and populate comments
-			if (barcode) {
-				product = await ProductModel.findOne({ barcode }).populate("comments");
-			} else {
-				product = await ProductModel.findById(id).populate("comments");
-			}
-			if (!product)
-				return res.status(403).json({ message: "Product not found" });
-			sendRateToArduino(Math.round(product.rate));
-			res.status(200).json(product);
+			const result = await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`)
+				.then((res) => res.json());
+			res.json(result);
+				// if (barcode) {
+			// 	product = await ProductModel.findOne({ barcode }).populate("comments");
+			// } else {
+			// 	product = await ProductModel.findById(id).populate("comments");
+			// }
+			// if (!product)
+			// 	return res.status(403).json({ message: "Product not found" });
+			// sendRateToArduino(Math.round(product.rate));
+			// res.status(200).json(product);
 		} catch (err) {
 			logger().info(err);
 			res.status(400).json({ message: "Internal issues" });

@@ -3,6 +3,7 @@ import logger from "../lib/logger";
 
 export default async (req: any, res: any, next: any) => {
 	const auth = req.headers.authorization;
+	console.log("auth", auth);
 	if (!auth) {
 		res.sendStatus(401);
 	} else {

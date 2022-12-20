@@ -8,11 +8,29 @@ export default {
 	cget: async (req: Request, res: Response) => {
 		try {
 			// not current user and not admin
-			const users = await UserModel.find({
-				...req.query,
-				_id: { $ne: req.user.id },
-				role: { $ne: USER_ROLE.ADMIN },
-			});
+			// const users = await UserModel.find({
+			// 	...req.query,
+			// 	_id: { $ne: req.user.id },
+			// 	role: { $ne: USER_ROLE.ADMIN },
+			// });
+			// aggregate find all user with role not admin or moderator
+			// and not current user
+			// add field for each user isBanned property to check if user is banned (if banned is not null)
+			const users = await UserModel.aggregate([
+				{
+					$match: {
+						_id: { $ne: new mongoose.Types.ObjectId(req.user.id) },
+						role: { $ne: [ USER_ROLE.ADMIN, USER_ROLE.MODERATOR ] },
+					},
+				},
+				{
+					$addFields: {
+						isBanned: { $ne: ["$banned", null] },
+						id: "$_id",
+					},
+				},
+			]);
+
 			res.json({
 				data: users,
 				total: users.length,

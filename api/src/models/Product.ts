@@ -8,6 +8,16 @@ import { CommentClass } from "./Comment";
 import BannedSchema from "./subdoc/SubBanned";
 
 
+/**
+ * fields needs
+
+  product_name_fr
+  quantity
+  brands
+
+  selected_images.front.display.fr
+  selected_images.front.thumb.fr
+ */
 @modelOptions({
 	schemaOptions: {
 		collection: "products",
@@ -28,14 +38,17 @@ export class ProductClass {
   @prop()
   public barcode!: string;
 
+  @prop()
+  public image: string;
+
+  @prop()
+  public thumb: string;
+
   @prop({ default: 0 })
   public rate!: number;
 
   @prop({ default: 0 })
   public userRated!: number;
-
-  @prop()
-  public image: string;
 
   @prop({ ref: () => CommentClass }) // for an array of references
   public comments: Ref<CommentClass>[];

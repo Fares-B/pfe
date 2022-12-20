@@ -5,9 +5,11 @@ const router = express.Router();
 
 router.get("/", BanController.cget);
 
+router.get("/:id", BanController.get);
+
 router.post("/:id", BanController.post);
 
-router.get("/:id", BanController.get);
+router.put("/:id", BanController.put);
 
 router.delete("/:id", BanController.delete);
 

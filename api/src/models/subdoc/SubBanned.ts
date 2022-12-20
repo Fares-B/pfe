@@ -9,4 +9,7 @@ export default class BannedSchema {
 
   @prop({ default: Date.now })
   date!: Date;
+
+  @prop()
+  unbanDate?: Date;
 }

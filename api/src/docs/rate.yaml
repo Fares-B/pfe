@@ -1,0 +1,110 @@
+paths:
+  rates:
+    get:
+      summary: Get all rates
+      description: Get all rates
+      tags:
+        - Rates
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Rate'
+                  total:
+                    type: number
+                    description: total rates
+    post:
+      summary: Create a rate
+      description: Create a rate
+      tags:
+        - Rates
+      requestBody:
+        description: Rate object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rate'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Rate'
+        '400':
+          description: Bad request
+  /rates/{rateId}:
+    get:
+      summary: Get a rate
+      description: Get a rate
+      tags:
+        - Rates
+      parameters:
+        - name: rateId
+          in: path
+          description: ID of rate to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+    put:
+      summary: Update a rate
+      description: Update a rate
+      tags:
+        - Rates
+      parameters:
+        - name: rateId
+          in: path
+          description: ID of rate to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Rate object that needs to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Rate'
+        '400':
+          description: Bad request
+    delete:
+      summary: Delete a rate
+      description: Delete a rate
+      tags:
+        - Rates
+      parameters:
+        - name: rateId
+          in: path
+          description: ID of rate to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: OK
+        '400':
+          description: Bad request

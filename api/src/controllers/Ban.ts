@@ -20,7 +20,6 @@ export default {
 			res.status(400).json({ message: "Internal issues" });
 		}
 	},
-
 	post: async (req: Request, res: Response) => {
 		const session = await db.startSession();
 
@@ -72,6 +71,7 @@ export default {
 				}
 			}
 			user.banned = { reason, date: new Date() };
+			user.allBans.push(user.banned);
 			await user.save();
 			await session.commitTransaction();
 			res.status(201).json({ data: user });
@@ -82,27 +82,40 @@ export default {
 		}
 		session.endSession();
 	},
-
 	get: async (req: Request, res: Response) => {
 		try {
 			const user = await UserModel.findOne({
 				_id: new mongoose.Types.ObjectId(req.params.id),
-				//banned not equals null
-				banned: { $ne: null },
+				banned: { $ne: null }, // not equals null
 			});
 			if (!user) return res.status(400).json({ message: "User not found" });
-			// banned info
-			res.status(200).json({
-				_id: user._id,
-				username: user.username,
-				reason: user.banned.reason,
-				date: user.banned.date,
-			});
+
+			// const data = {...};
+			res.json(user)
+			// res.json({ data });
 		} catch (err) {
 			res.status(400).json({ message: "Internal issues" });
 		}
 	},
-
+	put: async (req: Request, res: Response) => {
+		try {
+			const user = await UserModel.findOne({
+				_id: new mongoose.Types.ObjectId(req.params.id),
+				banned: { $ne: null },
+			});
+			if (user === null) throw new Error("User not found");
+			user.allBans.push({
+				reason: user.banned.reason,
+				date: user.banned.date,
+				unbanDate: new Date(),
+			});
+			user.banned = null;
+			await user.save();
+			res.json({ data: { id: user._id } });
+		} catch (err) {
+			res.status(400).json({ message: "Internal issues" });
+		}
+	},
 	delete: async (req: Request, res: Response) => {
 		try {
 			const user = await UserModel.findOne({

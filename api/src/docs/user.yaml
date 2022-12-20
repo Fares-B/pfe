@@ -1,0 +1,90 @@
+paths:
+  /users:
+    get:
+      summary: get all users
+      tags: [Users]
+      description: get all users
+      responses:
+        '201':
+          description: get all users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  total:
+                    type: number
+                    description: total users
+        '500':
+          description: internal issues
+        '403':
+          description: unauthorized
+    post:
+      summary: create a user
+      tags: [Users]
+      description: create a user
+      responses:
+        '201':
+          description: success to create a user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: internal issues
+        '403':
+          description: unauthorized
+  /users/{id}:
+    get:
+      summary: get a user
+      tags: [Users]
+      description: get a user
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: user id
+      responses:
+        '201':
+          description: get a user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: internal issues
+        '403':
+          description: unauthorized
+    put:
+      summary: update a user
+      tags: [Users]
+      description: update a user
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: user id
+        - in: body
+          name: body
+          description: user object
+          schema:
+            $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: success to update a user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: internal issues
+        '403':
+          description: unauthorized
