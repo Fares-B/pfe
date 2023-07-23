@@ -20,6 +20,9 @@ import {
   Menu as MenuIcon,
   MoreVert as MoreIcon,
 } from '@mui/icons-material';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { logoutRequest } from '../../reducers/account';
+import AlertDialog from '../Modal/ConfirmDialog';
 // import routes from '../../pages/routes';
 
 const linkStyle = {
@@ -36,7 +39,6 @@ const LINK_NAMES = {
   account: "Mon compte",
   register: "Inscription",
 }
-const IS_LOGGED = false;
 
 const MENU_ITEMS = [
   {
@@ -54,7 +56,14 @@ const MENU_ITEMS = [
   },
 ];
 
-export default function PrimarySearchAppBar() {
+interface Props {
+  openLoginModal: () => void;
+}
+
+const PrimarySearchAppBar: React.FC<Props> = ({ openLoginModal }) => {
+  const accessToken = useAppSelector(state => state.account.token);
+  const dispatch = useAppDispatch();
+
   const classes = {
     grow: {
       flexGrow: 1,
@@ -88,9 +97,11 @@ export default function PrimarySearchAppBar() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  const [openLogoutDialog, setOpenLogoutDialog] = React.useState(false);
+
   const handleProfileMenuOpen = (event: any) => {
     // open login page or login modal
-    if (!IS_LOGGED) return;
+    if (!accessToken) return openLoginModal();
 
     // else open menu
     setAnchorEl(event.currentTarget);
@@ -104,6 +115,12 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
+
+  const handleLogout = () => {
+    dispatch(logoutRequest());
+    handleMenuClose();
+    setOpenLogoutDialog(false);
+  }
 
   const handleMobileMenuOpen = (event: any) => {
     setMobileMoreAnchorEl(event.currentTarget);
@@ -136,7 +153,10 @@ export default function PrimarySearchAppBar() {
       <MenuItem onClick={handleMenuClose}>
         {LINK_NAMES.account}
       </MenuItem>
-      <MenuItem onClick={handleMenuClose}>
+      <MenuItem onClick={() => {
+        handleMenuClose();
+        setOpenLogoutDialog(true);
+      }}>
         {LINK_NAMES.logout}
       </MenuItem>
     </Menu>
@@ -185,6 +205,13 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box style={classes.grow}>
+      <AlertDialog
+        title='Déconnexion'
+        description='Êtes-vous sûr de vouloir vous déconnecter ?'
+        open={openLogoutDialog}
+        onConfirm={handleLogout}
+        onClose={() => setOpenLogoutDialog(false)}
+      />
       <AppBar position="static">
         <Toolbar>
 
@@ -342,3 +369,4 @@ export default function PrimarySearchAppBar() {
 
 }
 
+export default PrimarySearchAppBar;

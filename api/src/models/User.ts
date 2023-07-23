@@ -11,7 +11,9 @@ import BannedSchema from "./subdoc/SubBanned";
 const SALT_ROUNDS = 10;
 
 @pre<UserClass>("save", async function (next) {
+	console.log("pre save");
 	if (this.isModified("password")) {
+		console.log("enter in modify");
 		this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
 	}
 	next();
@@ -37,7 +39,7 @@ export class UserClass {
   @prop({ required: true, unique: true })
   public email!: string;
 
-  @prop({ unique: true })
+  @prop()
   public phone!: string;
 
   @prop()

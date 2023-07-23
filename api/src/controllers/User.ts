@@ -56,7 +56,7 @@ export default {
 			// logger().error(err);
 			if (urlPath === "/register")
 				logger().error({
-					message: `User ${req.body.phone} failed to register`,
+					message: `User ${req.body.email} failed to register`,
 					labels: { user: "register" },
 				});
 			res.status(400).json({ message: "Internal issues" });
