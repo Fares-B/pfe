@@ -4,8 +4,11 @@ import {
 	modelOptions,
 	Ref,
 } from "@typegoose/typegoose";
+import BannedSchema from "./subdoc/SubBanned";
+import SubUserClass from "./subdoc/SubUser";
 import { CommentClass } from "./Comment";
-import { SubReportClass } from "./subdoc/SubReport";
+import { UserClass } from "./User";
+import { GroupClass } from "./Group";
 
 
 @modelOptions({
@@ -21,12 +24,36 @@ import { SubReportClass } from "./subdoc/SubReport";
 		},
 	},
 })
+
+// location
+// description
 export class ProductClass {
-  @prop()
-	public name!: string;
+  @prop({ required: true })
+  public title!: string;
 
   @prop()
-  public barcode!: string;
+  public description!: string;
+
+  @prop({ required: true })
+  public author!: SubUserClass;
+
+  @prop()
+  public price!: number;
+
+  @prop()
+  public oldPrice!: number;
+
+  @prop({ required: true })
+  public link!: string;
+
+  @prop({ ref: () => GroupClass })
+  public groups: Ref<CommentClass>[];
+
+  @prop({ required: true })
+  public image!: string;
+
+  // @prop()
+  // public thumb: string;
 
   @prop({ default: 0 })
   public rate!: number;
@@ -34,20 +61,23 @@ export class ProductClass {
   @prop({ default: 0 })
   public userRated!: number;
 
-  @prop()
-  public image: string;
+  @prop({ default: 0 })
+  public views!: number;
 
   @prop({ ref: () => CommentClass }) // for an array of references
   public comments: Ref<CommentClass>[];
 
-  @prop({ default: false })
-  public deleted: boolean;
+  @prop({ default: false, description: "if product is deleted by moderation" })
+  public deleted!: boolean;
 
-  @prop({ default: false })
-  public visible: boolean;
+  @prop({ default: false, description: "if true, this product is visible on site" })
+  public visible!: boolean;
+
+  @prop({ default: null, description: "if not null, this product is verified by moderator and this is the moderator id" })
+  public verifiedBy: Ref<UserClass>;
 
   @prop()
-  public reports: SubReportClass[];
+  public banned?: BannedSchema;
 }
 
 export const ProductModel = getModelForClass(ProductClass);

@@ -1,0 +1,126 @@
+paths:
+  /bans:
+    get:
+      summary: get all bans
+      tags: [Bans]
+      description: get all bans
+      responses:
+        '200':
+          description: get all bans
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/User'
+                  total:
+                    type: number
+                    description: total bans
+        '400':
+          description: internal issues
+        '403':
+          description: unauthorized
+  /bans/{id}:
+    post:
+      summary: create a ban
+      tags: [Bans]
+      description: create a ban
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: user id
+        - in: body
+          name: body
+          description: ban object
+          schema:
+            type: object
+            properties:
+              reason:
+                type: string
+                description: ban reason
+      responses:
+        '201':
+          description: success to create a ban
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: internal issues
+        '403':
+          description: unauthorized
+    get:
+      summary: get a ban
+      tags: [Bans]
+      description: get a ban
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ban id
+      responses:
+        '201':
+          description: get a ban
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: internal issues
+        '403':
+          description: unauthorized
+    put:
+      summary: update a ban
+      tags: [Bans]
+      description: update a ban
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ban id
+      responses:
+        '201':
+          description: success to unban user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: internal issues
+        '403':
+          description: unauthorized
+    delete:
+      summary: delete a ban
+      tags: [Bans]
+      description: delete a ban
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ban id
+      responses:
+        '204':
+          description: success to delete a ban user
+        '400':
+          description: internal issues
+        '403':
+          description: unauthorized

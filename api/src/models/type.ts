@@ -1,4 +1,4 @@
-import { SubUserClass } from "./subdoc/SubUser";
+import SubUserClass from "./subdoc/SubUser";
 
 const USER_ROLE = {
 	ADMIN: "admin",
@@ -12,6 +12,10 @@ const BANNED_REASON = {
 	OTHER: "other",
 };
 
+const MESSAGE_ERROR = {
+  FIELDS_REQUIRED_OR_INVALID: "Fields required or invalid",
+}
+
 enum userRolesEnum {
   ADMIN = "admin",
   MODERATOR = "moderator",
@@ -24,10 +28,24 @@ enum bannedReasonEnum {
   OTHER = "other",
 }
 
+enum docTypeEnum {
+  PRODUCT = "product",
+  COMMENT = "comment",
+  USER = "user",
+}
+
 interface ReportType {
   user: SubUserClass;
   why: bannedReasonEnum;
   resolved: boolean;
 }
 
-export { userRolesEnum, bannedReasonEnum, ReportType, USER_ROLE, BANNED_REASON };
+export {
+  userRolesEnum,
+  bannedReasonEnum,
+  docTypeEnum,
+  ReportType,
+  USER_ROLE,
+  BANNED_REASON,
+  MESSAGE_ERROR,
+};

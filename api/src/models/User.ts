@@ -6,17 +6,9 @@ import {
 	modelOptions,
 } from "@typegoose/typegoose";
 import { bannedReasonEnum, userRolesEnum } from "./type";
+import BannedSchema from "./subdoc/SubBanned";
 
 const SALT_ROUNDS = 10;
-
-@modelOptions({ schemaOptions: { _id: null } })
-export class BannedSchema {
-  @prop({ enum: bannedReasonEnum, default: bannedReasonEnum.OTHER })
-  	reason!: bannedReasonEnum;
-
-  @prop({ default: Date.now })
-  	date!: Date;
-}
 
 @pre<UserClass>("save", async function (next) {
 	if (this.isModified("password")) {
@@ -39,11 +31,11 @@ export class BannedSchema {
 	},
 })
 export class UserClass {
-  @prop()
+  @prop({ required: true, unique: true })
 	public username!: string;
 
-  @prop()
-  public email?: string;
+  @prop({ required: true, unique: true })
+  public email!: string;
 
   @prop({ unique: true })
   public phone!: string;
@@ -62,6 +54,10 @@ export class UserClass {
 
   @prop()
   public banned?: BannedSchema;
+
+	// all ban
+	@prop()
+	public allBans?: Array<BannedSchema>;
 
   @prop({ default: Date.now })
   public lastLogin: Date;

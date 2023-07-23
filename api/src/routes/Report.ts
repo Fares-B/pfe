@@ -11,19 +11,19 @@ router.get(
 	ReportController.cget,
 );
 
-router.post("/", ReportController.post);
-
 router.get(
 	"/:id",
 	middlewares.authorization({ role: userRolesEnum.MODERATOR }),
 	ReportController.get,
 );
 
-// router.put(
-//   "/:id",
-//   middlewares.authorization({ role: userRolesEnum.MODERATOR }),
-//   ReportController.put,
-// );
+router.post("/", ReportController.post);
+
+router.put(
+  "/:id",
+  middlewares.authorization({ role: userRolesEnum.MODERATOR }),
+  ReportController.put,
+);
 
 router.delete(
 	"/:id",

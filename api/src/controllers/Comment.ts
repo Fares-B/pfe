@@ -12,10 +12,46 @@ const COMMENT_NOT_FOUND_STRING = "Comment not found";
 export default {
 	cget: async (req: Request, res: Response) => {
 		// if moderator, return all comments else return only comments with deleted = false
-		const options =
-      req.user.role === USER_ROLE.MODERATOR ? {} : { deleted: false };
+		const isModerator = req.user.role === USER_ROLE.MODERATOR
+		let filter: any = {};
+
+		if (req.query.userId && typeof req.query.userId === "string") {
+
+			filter["user.id"] = new mongoose.Types.ObjectId(req.query.userId);
+		}
+		console.log("FILTER", filter);
+
 		try {
-			const comments = await CommentModel.find({ ...req.query, ...options });
+			// console.log("QUERY", filter);
+		
+			// const comments = await CommentModel.find({ ...req.query, ...options });
+			const comments = await CommentModel.aggregate([
+				{
+					$match: {
+						// if is moderator, return all comments else return only comments with deleted = false
+
+						...filter,
+					},
+				},
+				// group by date and add field count equals to all comments
+				{
+					$group: {
+						_id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+						comments: { $push: "$$ROOT" },
+						sum: { $sum: 1 },
+					},
+				},
+				// replace _id with id
+				{
+					$project: {
+						_id: 0,
+						id: "$_id",
+						comments: 1,
+						sum: 1,
+					},
+				},
+			]);
+
 			res.json({
 				data: comments,
 				total: comments.length,

@@ -27,16 +27,23 @@ const data = (apiUrl: string) => {
       //   sort: params.sort,
       //   // filter: filters,
       // };
-      console.log(params);
-      const queries = `sort=${params.sort.field}&_order=${params.sort.order}`; // 
+      let queries = `sort=${params.sort.field}&_order=${params.sort.order}`;
+      if(params.filter) {
+        queries = `${queries}&${Object.keys(params.filter).map(key => `${key}=${params.filter[key]}`).join('&')}`;
+      }
       const url = `${apiUrl}/${resource}?${queries}`;
       const { headers, json } = await httpClient(url);
       return json;
     },
-    getOne: (resource: any, params: any) =>
-      httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => ({
-        data: json,
-      })),
+    getOne: (resource: any, params: any ) => {
+      let url = `${apiUrl}/${resource}/${params.id}`;
+      // if params.meta add query to url
+      if(params.meta) {
+        const queries = Object.keys(params.meta).map(key => `${key}=${params.meta[key]}`).join('&');
+        url = `${url}?${queries}`;
+      }
+      return httpClient(url).then(({ json }) => ({ data: json }));
+    },
     getMany: () => Promise.reject(),
     getManyReference: () => Promise.reject(),
     update: (resource: string, params: any) => 

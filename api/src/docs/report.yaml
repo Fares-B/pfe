@@ -1,0 +1,110 @@
+paths:
+  reports:
+    get:
+      summary: Get all reports
+      description: Get all reports
+      tags:
+        - Reports
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Report'
+                  total:
+                    type: number
+                    description: total reports
+    post:
+      summary: Create a report
+      description: Create a report
+      tags:
+        - Reports
+      requestBody:
+        description: Report object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Report'
+        '400':
+          description: Bad request
+  reports/{reportId}:
+    get:
+      summary: Get a report
+      description: Get a report
+      tags:
+        - Reports
+      parameters:
+        - name: reportId
+          in: path
+          description: ID of report to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+    put:
+      summary: Update a report
+      description: Update a report
+      tags:
+        - Reports
+      parameters:
+        - name: reportId
+          in: path
+          description: ID of report to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Report object that needs to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Report'
+        '400':
+          description: Bad request
+    delete:
+      summary: Delete a report
+      description: Delete a report
+      tags:
+        - Reports
+      parameters:
+        - name: reportId
+          in: path
+          description: ID of report to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request

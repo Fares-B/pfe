@@ -1,17 +1,31 @@
 import mongoose from "mongoose";
 import { Request, Response } from "../interfaces/express";
 import logger from "../lib/logger";
-import { sendRateToArduino } from "../middlewares/qrcode";
 import { ProductModel } from "../models";
-import { USER_ROLE } from "../models/type";
+import {
+	USER_ROLE,
+	MESSAGE_ERROR,
+} from "../models/type";
+
+
+function getQueryVerifyWithRole(role: string) {
+	if (role !== USER_ROLE.MODERATOR) {
+		return {
+			deleted: false,
+			visible: true,
+			verified: true,
+		};
+	}
+	return {};
+}
 
 export default {
 	cget: async (req: Request, res: Response) => {
-		// if moderator, return all products else return only products with deleted = false
-		const options =
-      req.user.role === USER_ROLE.MODERATOR ? {} : { deleted: false };
 		try {
-			const products = await ProductModel.find({ ...req.query, ...options });
+			const products = await ProductModel.find({
+				...req.query,
+				...getQueryVerifyWithRole(req?.user?.role)
+			});
 			res.json({
 				data: products,
 				total: products.length,
@@ -21,55 +35,55 @@ export default {
 		}
 	},
 
-	post: async (req: Request, res: Response) => {
+	get: async (req: Request, res: Response) => {
 		try {
-			const product = new ProductModel({ ...req.body });
-			await product.save();
-			res.status(201).json({
-				data: product,
-			});
-		} catch (err) {
-			res.status(400).json({ message: "Internal issues" });
+			const product = await ProductModel
+				.findOne({ _id: req.params.id, ...getQueryVerifyWithRole(req?.user?.role) })
+				.populate("comments");
+			if (!product) throw new Error("Product not found");
+			res.status(200).json(product);
+		} catch ({ message }) {
+			logger().info(message);
+			if (message === "Product not found")
+				return res.status(404).json({ message });
+			res.status(500).json({ message: "Internal issues" });
 		}
 	},
 
-	get: async (req: Request, res: Response) => {
-		const { id, barcode = null } = req.params;
+	post: async (req: Request, res: Response) => {
 		try {
-			let product = null;
-			// find and populate comments
-			if (barcode) {
-				product = await ProductModel.findOne({ barcode }).populate("comments");
-			} else {
-				product = await ProductModel.findById(id).populate("comments");
-			}
-			if (!product)
-				return res.status(403).json({ message: "Product not found" });
-			sendRateToArduino(Math.round(product.rate));
-			res.status(200).json(product);
-		} catch (err) {
-			logger().info(err);
-			res.status(400).json({ message: "Internal issues" });
+			const author = {
+				id: req.user.id,
+				username: req.user.username,
+				image: req.user.image,
+			};
+			const product = new ProductModel({ ...req.body, author });
+			const error = product.validateSync();
+			if (error) throw new Error(MESSAGE_ERROR.FIELDS_REQUIRED_OR_INVALID);
+			await product.save();
+			res.status(201).json({ data: product });
+		} catch ({ message }) {
+			if (message === MESSAGE_ERROR.FIELDS_REQUIRED_OR_INVALID)
+				return res.status(400).json({ message });
+			res.status(500).json({ message: "Internal issues" });
 		}
 	},
 
 	put: async (req: Request, res: Response) => {
 		try {
 			const product = await ProductModel.findOneAndUpdate(
-				{
-					_id: new mongoose.Types.ObjectId(req.params.id),
-				},
+				{ _id: new mongoose.Types.ObjectId(req.params.id) },
 				{ ...req.body },
 			);
-
-			if (product === null) throw new Error("Product not found");
-
+			if (!product) throw new Error("Product not found");
+			const error = product.validateSync();
+			if (error) throw new Error(MESSAGE_ERROR.FIELDS_REQUIRED_OR_INVALID);
 			await product.save();
-			res.json({
-				data: product,
-			});
+			res.json({ data: product });
 		} catch (err) {
-			res.status(400).json({ message: "Internal issues" });
+			if (err.message === MESSAGE_ERROR.FIELDS_REQUIRED_OR_INVALID)
+				return res.status(400).json({ message: err.message });
+			res.status(500).json({ message: "Internal issues" });
 		}
 	},
 
@@ -82,10 +96,10 @@ export default {
 				},
 				{ deleted: true },
 			);
-			if (product === null) throw new Error("Product not found");
+			if (!product) throw new Error("Product not found");
 			res.status(204).end();
 		} catch (err) {
-			res.status(400).json({ message: "Internal issues" });
+			res.status(500).json({ message: "Internal issues" });
 		}
 	},
 };

@@ -21,6 +21,7 @@ export default function UsersList() {
           <DateField source="createdAt" />
           <DateField source="lastLogin" />
           <BooleanField source="verified" />
+          <BooleanField source="isBanned" label="Banned" />
           <EditButton />
           <ShowButton />
         </Datagrid>
