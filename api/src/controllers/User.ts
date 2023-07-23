@@ -5,6 +5,7 @@ import { UserModel } from "../models";
 import { USER_ROLE } from "../models/type";
 
 export default {
+	// get all users
 	cget: async (req: Request, res: Response) => {
 		try {
 			// not current user and not admin
@@ -39,6 +40,7 @@ export default {
 			res.status(500).json({ message: "Internal issues" });
 		}
 	},
+	// create new user
 	post: async (req: Request, res: Response) => {
 		const urlPath = req.originalUrl;
 		try {
@@ -60,6 +62,7 @@ export default {
 			res.status(400).json({ message: "Internal issues" });
 		}
 	},
+	// get user by id
 	get: async (req: Request, res: Response) => {
 		try {
 			let userId = req.params.id;
@@ -75,13 +78,19 @@ export default {
 			res.status(400).json({ message: "Internal issues" });
 		}
 	},
+	// update user
 	put: async (req: Request, res: Response) => {
 		try {
+			const userData = {
+				phone: req.body.phone,
+				username: req.body.username,
+				verified: req.body.verified,
+			};
 			const user = await UserModel.findOneAndUpdate(
 				{
 					_id: new mongoose.Types.ObjectId(req.user.id),
 				},
-				{ ...req.body },
+				{ ...userData },
 			);
 
 			if (user === null) throw new Error("User not found");

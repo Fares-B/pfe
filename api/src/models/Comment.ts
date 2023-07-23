@@ -5,7 +5,7 @@ import {
 } from "@typegoose/typegoose";
 import mongoose from "mongoose";
 import BannedSchema from "./subdoc/SubBanned";
-import { SubUserClass } from "./subdoc/SubUser";
+import SubUserClass from "./subdoc/SubUser";
 
 
 @modelOptions({

@@ -2,7 +2,7 @@ import { prop, modelOptions } from "@typegoose/typegoose";
 import mongoose from "mongoose";
 
 @modelOptions({ schemaOptions: { _id: false } })
-export class SubUserClass {
+export default class SubUserClass {
   @prop({ type: mongoose.Schema.Types.ObjectId, ref: "users" })
 	public id!: mongoose.Schema.Types.ObjectId;
 

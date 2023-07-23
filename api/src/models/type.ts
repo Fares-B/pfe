@@ -1,4 +1,4 @@
-import { SubUserClass } from "./subdoc/SubUser";
+import SubUserClass from "./subdoc/SubUser";
 
 const USER_ROLE = {
 	ADMIN: "admin",
@@ -11,6 +11,10 @@ const BANNED_REASON = {
 	HARASSMENT: "harassment",
 	OTHER: "other",
 };
+
+const MESSAGE_ERROR = {
+  FIELDS_REQUIRED_OR_INVALID: "Fields required or invalid",
+}
 
 enum userRolesEnum {
   ADMIN = "admin",
@@ -42,5 +46,6 @@ export {
   docTypeEnum,
   ReportType,
   USER_ROLE,
-  BANNED_REASON
+  BANNED_REASON,
+  MESSAGE_ERROR,
 };

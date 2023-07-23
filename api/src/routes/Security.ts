@@ -7,14 +7,23 @@ const router = express.Router();
 
 router.post("/login", async (req, res) => {
 	try {
+		const {
+			username = null,
+			email = null,
+			phone = null,
+		} = req.body;
+
 		const user = await UserModel.findOne({
-			phone: req.body.phone,
 			banned: null,
+			$or: [
+				{ username },
+				{ email },
+				{ phone },
+			],
 		});
 
 		if (user && (await user.comparePassword(req.body.password))) {
 			const token = createToken(user);
-			// update last login
 			user.lastLogin = new Date();
 			await user.save();
 			res.json({ token });
@@ -22,8 +31,7 @@ router.post("/login", async (req, res) => {
 			res.status(401).json({ username: "Invalid credentials" });
 		}
 	} catch (err) {
-		console.error(err.message);
-		res.status(400).json({ message: "Internal issues" });
+		res.status(500).json({ message: "Internal issues" });
 	}
 });
 

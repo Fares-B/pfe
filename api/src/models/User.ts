@@ -31,11 +31,11 @@ const SALT_ROUNDS = 10;
 	},
 })
 export class UserClass {
-  @prop()
+  @prop({ required: true, unique: true })
 	public username!: string;
 
-  @prop()
-  public email?: string;
+  @prop({ required: true, unique: true })
+  public email!: string;
 
   @prop({ unique: true })
   public phone!: string;

@@ -74,9 +74,11 @@ app.get("/", (req, res) => {
 
 app.use("/users", middlewares.authentication, routes.UserRoutes);
 
-app.use("/products", middlewares.authentication, routes.ProductRoutes);
+app.use("/products", routes.ProductRoutes);
 
-app.use("/comments", middlewares.authentication, routes.CommentRoutes);
+app.use("/comments", routes.CommentRoutes);
+
+app.use("/groups", routes.GroupRoutes);
 
 app.use("/reports", middlewares.authentication, routes.ReportRoutes);
 

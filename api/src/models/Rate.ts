@@ -5,7 +5,7 @@ import {
 	modelOptions,
 	prop,
 } from "@typegoose/typegoose";
-import { SubUserClass } from "./subdoc/SubUser";
+import SubUserClass from "./subdoc/SubUser";
 
 // unique rate for user and (product or comment)
 @index({ "user.id": 1, "productId": 1, "commentId": -1 }, { unique: true })
@@ -25,7 +25,7 @@ import { SubUserClass } from "./subdoc/SubUser";
   },
 })
 export class RateClass {
-  @prop({ enum: [-1, 1, 2, 3, 4, 5] })
+  @prop({ enum: [-1, 1] })
 	public rate!: number;
 
   @prop()

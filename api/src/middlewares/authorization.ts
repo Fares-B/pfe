@@ -5,8 +5,9 @@ interface Options {
 }
 
 export default function (options: Options) {
+	const { role, verified = false, isCurrentUser } = options;
+
 	return async (req: any, res: any, next: any) => {
-		const { role, verified = true, isCurrentUser } = options;
 		const { user } = req;
 
 		if (verified && !user.verified) {

@@ -5,7 +5,7 @@ import ProductRoutes from "./Product";
 import CommentRoutes from "./Comment";
 import ReportRoutes from "./Report";
 import RateRoutes from "./Rate";
-
+import GroupRoutes from "./Group";
 
 export default {
 	UserRoutes,
@@ -15,4 +15,5 @@ export default {
 	CommentRoutes,
 	ReportRoutes,
 	RateRoutes,
+	GroupRoutes,
 };

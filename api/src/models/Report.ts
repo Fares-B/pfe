@@ -1,6 +1,6 @@
 import { prop, modelOptions, mongoose, getModelForClass, Ref } from "@typegoose/typegoose";
 import { bannedReasonEnum, docTypeEnum } from "./type";
-import { SubUserClass } from "./subdoc/SubUser";
+import SubUserClass from "./subdoc/SubUser";
 import { CommentClass } from "./Comment";
 import { ProductClass } from "./Product";
 import { UserClass } from "./User";
