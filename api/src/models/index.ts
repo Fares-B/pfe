@@ -5,3 +5,4 @@ export * from "./Rate";
 export * from "./Comment";
 export * from "./Report";
 export * from "./Group";
+export * from "./ForgotPassword";

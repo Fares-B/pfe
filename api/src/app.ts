@@ -68,6 +68,10 @@ app.use((req, res, next) => {
 	next();
 });
 
+app.get("/_health", (req, res) => {
+	res.send("Server is up and running! ✔");
+});
+
 app.get("/", (req, res) => {
 	res.send("Hello World!");
 });
