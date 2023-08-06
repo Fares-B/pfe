@@ -3,6 +3,7 @@ import { createToken } from "../lib/jwt";
 import { UserController } from "../controllers";
 import { ForgotPasswordModel, UserModel } from "../models";
 import { generateCodeNumeric } from "../lib/functions";
+import { EMAIL_CONTENT, sendEmail } from "../lib/mail";
 
 const router = express.Router();
 
@@ -39,6 +40,7 @@ router.post("/login", async (req, res) => {
 router.post("/register", UserController.post);
 
 router.post("/forgot-password", async (req, res) => {
+	const EXPIRATE_AT_HOURS = 1;
 	try {
 		const { email } = req.body;
 		// find user with email
@@ -50,14 +52,14 @@ router.post("/forgot-password", async (req, res) => {
 		const forgotPassword = new ForgotPasswordModel({
 			code,
 			email,
-			expiredAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour expiration time
+			expiredAt: new Date(Date.now() + EXPIRATE_AT_HOURS * 60 * 60 * 1000),
 		});
 
 		await forgotPassword.save();
 
 		console.log("code", code);
-		// A FAIRE
 		// send email with code to reset password
+		await sendEmail(email, EMAIL_CONTENT.FORGOT_PASSWORD, { name: user.username, code });
 		res.json({ success: true });
 	} catch (err) {
 		res.status(500).json({ message: "Internal issues" });
@@ -80,10 +82,15 @@ router.post("/reset-password", async (req, res) => {
 		const user = await UserModel.findOne({ email });
 		if (!user) { return res.status(404).json({ message: "User not found" }); }
 
+		// update user password
+		user.password = password;
 		await user.save();
 	
 		// remove all reset password codes with email
-		// await ForgotPasswordModel.remove({ email });
+		await ForgotPasswordModel.remove({ email });
+
+		// send email to confirm password has been reset
+		await sendEmail(email, EMAIL_CONTENT.RESET_PASSWORD, { name: user.username });
 
 		res.json({ success: true });
 	} catch (err) {
