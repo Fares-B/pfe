@@ -6,24 +6,19 @@ import {
   IconButton,
   Typography,
   InputBase,
-  Badge,
   MenuItem,
   Menu,
   alpha,
   Box,
 } from '@mui/material';
 import {
-  MailOutline as MailIcon,
   AccountCircle as AccountCircleIcon,
-  Notifications as NotificationsIcon,
   Search as SearchIcon,
   Menu as MenuIcon,
-  MoreVert as MoreIcon,
 } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { logoutRequest } from '../../reducers/account';
 import AlertDialog from '../Modal/ConfirmDialog';
-// import routes from '../../pages/routes';
 
 const linkStyle = {
   textDecoration: 'none',
@@ -122,9 +117,9 @@ const PrimarySearchAppBar: React.FC<Props> = ({ openLoginModal }) => {
     setOpenLogoutDialog(false);
   }
 
-  const handleMobileMenuOpen = (event: any) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
+  // const handleMobileMenuOpen = (event: any) => {
+  //   setMobileMoreAnchorEl(event.currentTarget);
+  // };
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);

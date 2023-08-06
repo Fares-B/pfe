@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, TextField, Typography, Button, Divider } from "@mui/material";
-import { set, useForm } from 'react-hook-form';
+import { /* set, */ useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
@@ -17,10 +17,10 @@ interface Props {
   onOpenForgotModal: () => void;
 }
 
-const ERRORS = {
-  "Invalid credentials": "Email ou mot de passe incorrect",
-  "Internal issues": "Une erreur est survenue, veuillez réessayer plus tard",
-}
+// const ERRORS = {
+//   "Invalid credentials": "Email ou mot de passe incorrect",
+//   "Internal issues": "Une erreur est survenue, veuillez réessayer plus tard",
+// }
 
 
 const Login: React.FC<Props> = ({
@@ -31,7 +31,7 @@ const Login: React.FC<Props> = ({
 }) => {
   const {
     register,
-    control,
+    // control,
     handleSubmit,
     formState: { errors }
   } = useForm({

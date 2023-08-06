@@ -17,7 +17,7 @@ const ForgotPasswordRequest: React.FC<Props> = ({
 }) => {
   const {
     register,
-    control,
+    // control,
     handleSubmit,
     formState: { errors }
   } = useForm({

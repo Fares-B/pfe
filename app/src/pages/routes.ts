@@ -19,8 +19,13 @@ export const routes: RouteInterface[] = [
     component: Home,
   },
   {
-    path: "/bons-plans/:name",
+    path: "/deal/:id",
     name: "product",
+    component: Product,
+  },
+  {
+    path: "/bons-plans/:name",
+    name: "productName",
     component: Product,
   },
   {

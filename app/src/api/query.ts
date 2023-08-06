@@ -1,8 +1,3 @@
-
-const API_URL = 'https://api.github.com/graphql';
-
-
-
 type medthodType = "PUT" | "POST" | "GET";
 
 interface OptionsProps {
