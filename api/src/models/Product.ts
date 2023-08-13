@@ -43,6 +43,9 @@ export class ProductClass {
   @prop()
   public oldPrice!: number;
 
+  @prop()
+  public discountCode!: string;
+
   @prop({ required: true })
   public link!: string;
 

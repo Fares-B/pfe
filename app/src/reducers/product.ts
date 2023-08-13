@@ -6,6 +6,9 @@ export interface ProductType {
   id: string;
   verifiedBy: null | string;
   title: string;
+  price: number|undefined;
+  oldPrice: number|undefined;
+  discountCode: string|undefined;
   author: {
     id: string;
     username: string;
@@ -28,6 +31,7 @@ interface ProductState {
   total: number;
   page: number;
   limit: number;
+  product: null | ProductType;
   products: ProductType[];
   action: { loading : boolean, error: null | string };
 }
@@ -37,6 +41,7 @@ const initialState: ProductState = {
   total: 0,
   page: 1,
   limit: 10,
+  product: null,
   products: [],
   action: {
     loading : false,
@@ -68,6 +73,22 @@ export const productSlice = createSlice({
         error: action.payload,
       };
     },
+    productRequest: (state, action: PayloadAction<string>) => {
+      state.action = {
+        loading: true,
+        error: null
+      };
+    },
+    productSuccess: (state, action: PayloadAction<ProductType>) => {
+      state.product = action.payload;
+      state.action.loading = false;
+    },
+    productFailure: (state, action: PayloadAction<string>) => {
+      state.action = {
+        loading: false,
+        error: action.payload,
+      };
+    },
   },
 });
 
@@ -75,6 +96,9 @@ export const {
   productsRequest,
   productsSuccess,
   productsFailure,
+  productRequest,
+  productSuccess,
+  productFailure,
 } = productSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type

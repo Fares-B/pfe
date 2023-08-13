@@ -1,17 +1,19 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useState } from 'react';
 import { Container, CssBaseline } from '@mui/material';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/private-theming';
+import { Provider } from 'react-redux';
 import { routes } from '../pages/routes';
 import AppBar from '../components/AppBar';
-import { AppProvider } from '../context';
 import Login from '../components/Modal/Login';
 import Register from '../components/Modal/Register';
 import Forgot from '../components/Modal/Forgot';
-import { Provider } from 'react-redux';
 import store from '../store/index';
+import moment from 'moment';
+import 'moment/locale/fr';
 
+moment.locale("fr");
 
 let theme = createTheme({
   palette: {
@@ -84,7 +86,7 @@ export default function Boot() {
           />
 
           {/* MAIN */}
-          <Container>
+          <Container style={{ backgroundColor: "#e9eaed" }}>
             <Suspense fallback={<div>Chargement...</div>}>
               <Routes>
                 {routes.map((route, i) => (
