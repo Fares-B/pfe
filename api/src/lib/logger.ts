@@ -3,30 +3,30 @@ import LokiTransport from "winston-loki";
 
 let loggerLocal: Logger;
 
-const optionsLogger = {
-	transports: [
-		new LokiTransport({
-			host: process.env.GRAFANA_URL,
-			labels: { app: "api" },
-			basicAuth: process.env.GRAFANA_AUTH,
-			json: true,
-			// @ts-ignore
-			format: format.json(),
-			// interval: 10,
-			// timeout: 6000,
-			replaceTimestamp: true,
-			onConnectionError: (err) => console.error(err),
-		}),
-		new transports.Console({
-			format: format.combine(format.simple(), format.colorize()),
-		}),
-	],
-};
+// const optionsLogger = {
+// 	transports: [
+// 		new LokiTransport({
+// 			host: process.env.GRAFANA_URL,
+// 			labels: { app: "api" },
+// 			basicAuth: process.env.GRAFANA_AUTH,
+// 			json: true,
+// 			// @ts-ignore
+// 			format: format.json(),
+// 			// interval: 10,
+// 			// timeout: 6000,
+// 			replaceTimestamp: true,
+// 			onConnectionError: (err) => console.error(err),
+// 		}),
+// 		new transports.Console({
+// 			format: format.combine(format.simple(), format.colorize()),
+// 		}),
+// 	],
+// };
 
 const initializeLogger = () => {
 	if (loggerLocal) return;
 	loggerLocal = createLogger(
-		process.env.node_env === "production" ? optionsLogger : {},
+		// process.env.node_env === "production" ? optionsLogger : {},
 	);
 };
 
