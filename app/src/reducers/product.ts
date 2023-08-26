@@ -6,6 +6,7 @@ export interface ProductType {
   id: string;
   verifiedBy: null | string;
   title: string;
+  description: string;
   price: number|undefined;
   oldPrice: number|undefined;
   discountCode: string|undefined;

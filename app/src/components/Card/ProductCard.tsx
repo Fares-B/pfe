@@ -1,9 +1,9 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Tooltip, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ProductType, productSuccess } from "../../reducers/product";
 import Notation from "../Button/Notation";
 import moment from "moment";
-import { CommentBank, ArrowForward } from "@mui/icons-material";
+import { CommentBank, ArrowForward, Code } from "@mui/icons-material";
 import { useAppDispatch } from "../../store/hooks";
 import { useState } from "react";
 
@@ -21,44 +21,65 @@ const DateLabel = ({ date }: { date: string }) => {
 
 
   return (
-    <Box
-      color="#9ca3af"
-      fontSize="12px"
-      display="flex"
-      alignItems="center"
-      gap={1}
-    >
-      {dateLabel}
-    </Box>
+    <Tooltip title={moment(date).format("[Le] DD MMMM YYYY [à] HH[h]mm")}>
+      <Box
+        color="#9ca3af"
+        fontSize="12px"
+        display="flex"
+        alignItems="center"
+        gap={1}
+      >
+        {dateLabel}
+      </Box>
+    </Tooltip>
   );
 };
 
 const ShowDeal = ({ onClick, product }: { onClick: any, product: ProductType }) => {
   const [showCode, setShowCode] = useState(false);
-  const color = !product.discountCode || showCode ? "white" : "primary.main";
-  if (product.discountCode) {
-    
-  }
+  const color = showCode ? "primary.main" : "white";
 
   const handleDiscoundCode = (event: any) => {
     event.stopPropagation();
     setShowCode(true);
+    if (product.discountCode) navigator.clipboard.writeText(product.discountCode);
   }
 
   return (
     <Box
       borderRadius="50vh"
       display="flex"
-      gap={0.5}
+      justifyContent="center"
       alignItems="center"
-      onClick={showCode || !product.discountCode ? onClick : handleDiscoundCode}
+      gap={0.5}
+      onClick={product.discountCode ? handleDiscoundCode : onClick}
       fontSize={13}
-      bgcolor={!product.discountCode || showCode ? "primary.main" : "white"}
+      bgcolor={showCode ? "white" : "primary.main"}
+      borderColor={"primary.main"}
+      border={1}
       color={color}
       px={1}
+      sx={{ cursor: showCode ? "copy" : "pointer" }}
     >
-      {showCode || !product.discountCode ? "Voir le code" : "Voir le deal"}
-      <ArrowForward sx={{ width: 16, color }} />
+      {product.discountCode ?
+        showCode ? (
+          <Tooltip title="Le code a été copié">
+            <Box sx={{ color }}>{product?.discountCode}</Box>
+          </Tooltip>
+        ) :
+          "Voir le code" :
+        "Voir le deal"
+      }
+
+      {!product.discountCode || showCode ? (
+        <Tooltip title="Voir le deal">
+          <ArrowForward onClick={showCode ? onClick : () => null} sx={{ width: 16, color, cursor: "pointer" }} />
+        </Tooltip>
+      ) : (
+        <Tooltip title="Copier le code">
+          <Code sx={{ width: 16, color }} />
+        </Tooltip>
+      )}
     </Box>
   );
 };
@@ -67,7 +88,7 @@ const ProductCard = ({ product }: Props) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  function onNavigateProduct(toComments: boolean|any = false) {
+  function onNavigateProduct(toComments: boolean | any = false) {
     const suffix = toComments === true ? "#comments" : "";
     dispatch(productSuccess(product));
     navigate(`/deal/${product.id}${suffix}`);
@@ -101,7 +122,8 @@ const ProductCard = ({ product }: Props) => {
       onClick={onNavigateProduct}
     >
       <Box
-        width={100} height={100}
+        width={"100px"} height={"100px"}
+        minWidth="100px"
         bgcolor="#e9eaed"
         borderRadius="4px"
         display="flex"
@@ -113,7 +135,6 @@ const ProductCard = ({ product }: Props) => {
         <img
           src={product.image}
           alt={product.title}
-          // height={100}
           style={{
             width: 'auto',
             height: '100%',
@@ -138,6 +159,18 @@ const ProductCard = ({ product }: Props) => {
         >
           {product.title}
         </Box>
+        <Typography
+          flexGrow={1}
+          fontSize="small"
+          sx={{
+            display: '-webkit-box',
+            overflow: 'hidden',
+            WebkitBoxOrient: 'vertical',
+            WebkitLineClamp: 2,
+          }}
+        >
+          {product.description}
+        </Typography>
 
         <Box display="flex" justifyContent="space-between" alignItems="flex-end">
           <Box
@@ -174,11 +207,19 @@ const ProductCard = ({ product }: Props) => {
                 {product.comments.length}
               </Box>
             </Box>
-            <ShowDeal
-              product={product}
-              onClick={onClickShowDeal}
-            />
+            <Box sx={{ display: { xs: "none", sm: "block" } }}>
+              <ShowDeal
+                product={product}
+                onClick={onClickShowDeal}
+              />
+            </Box>
           </Box>
+        </Box>
+        <Box sx={{ mt: 0.5, display: { xs: "block", sm: "none" } }}>
+          <ShowDeal
+            product={product}
+            onClick={onClickShowDeal}
+          />
         </Box>
       </Box>
 

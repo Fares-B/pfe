@@ -39,7 +39,7 @@ const Notation = ({ rate = 0 }: { rate: number | undefined }) => {
       alignItems="center"
       gap={1}
       borderRadius="100px"
-      borderColor="#d1d5db"
+      borderColor="#d1d5db !important"
       border={1}
       px={0.3}
       py={0.2}
