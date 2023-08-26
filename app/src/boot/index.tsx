@@ -93,7 +93,7 @@ export default function Boot() {
                   <Route
                     key={i}
                     path={route.path}
-                    element={<route.component />}
+                    element={<route.component openLoginModal={() => setAuthModal("login")} />}
                   />
                 ))}
               </Routes>

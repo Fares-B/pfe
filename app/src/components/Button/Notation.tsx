@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+import { useAppSelector } from "../../store/hooks";
 
 const RateButton = ({ isPositive, onPress }: { isPositive: boolean, onPress: any }) => {
   const color = isPositive ? "rgb(224,0,52)" : "rgb(3,165,193)";
@@ -24,12 +25,21 @@ const RateButton = ({ isPositive, onPress }: { isPositive: boolean, onPress: any
   );
 };
 
-const Notation = ({ rate = 0 }: { rate: number | undefined }) => {
+const Notation = ({ rate = 0, openLoginModal }: {
+  rate: number | undefined,
+  openLoginModal: () => void,
+}) => {
+  const isLogged = useAppSelector(state => state.account.token);
 
   function onPressNegative() {
+    // open login modal
+    if (!isLogged) return openLoginModal();
+
     console.log("on press -1", rate)
   }
   function onPressPositive() {
+    // open login modal
+    if (!isLogged) return openLoginModal();
     console.log("on press +1")
   }
 

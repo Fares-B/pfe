@@ -4,7 +4,11 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import Card from "../../components/Card";
 import { Box, CircularProgress } from "@mui/material";
 
-const Home: React.FC = () => {
+interface Props {
+  openLoginModal: () => void;
+};
+
+const Home: React.FC<Props> = ({ openLoginModal }) => {
   const dispatch = useAppDispatch();
   const { products, action, total } = useAppSelector((state) => state.product);
 
@@ -23,7 +27,7 @@ const Home: React.FC = () => {
         pt={2}
       >
         {products.map(el => (
-          <Card.ProductCard key={el.id} product={el} />
+          <Card.ProductCard key={el.id} product={el} openLoginModal={openLoginModal} />
         ))}
       </Box>
       <Box display="flex" justifyContent="center">

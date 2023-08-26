@@ -4,11 +4,12 @@ import { ProductType, productSuccess } from "../../reducers/product";
 import Notation from "../Button/Notation";
 import moment from "moment";
 import { CommentBank, ArrowForward, Code } from "@mui/icons-material";
-import { useAppDispatch } from "../../store/hooks";
-import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import React, { useState } from "react";
 
 interface Props {
   product: ProductType;
+  openLoginModal: () => void;
 };
 
 const DateLabel = ({ date }: { date: string }) => {
@@ -84,9 +85,10 @@ const ShowDeal = ({ onClick, product }: { onClick: any, product: ProductType }) 
   );
 };
 
-const ProductCard = ({ product }: Props) => {
+const ProductCard: React.FC<Props> = ({ product, openLoginModal }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const isLogged = useAppSelector(state => state.account.token);
 
   function onNavigateProduct(toComments: boolean | any = false) {
     const suffix = toComments === true ? "#comments" : "";
@@ -107,6 +109,14 @@ const ProductCard = ({ product }: Props) => {
 
   function onShowProfile(author: any) {
     console.log("on show profile", author);
+  }
+
+  function onPressSave(event: any) {
+    event.stopPropagation();
+    // open login modal
+    if (!isLogged) return openLoginModal();
+
+    console.log("on press save as favoris");
   }
 
   return (
@@ -148,7 +158,7 @@ const ProductCard = ({ product }: Props) => {
       </Box>
       <Box flexGrow={1} display="flex" flexDirection="column">
         <Box display="flex" justifyContent="space-between">
-          <Notation rate={product.rate} />
+          <Notation rate={product.rate} openLoginModal={openLoginModal} />
           <DateLabel date={product.createdAt} />
         </Box>
         <Box
@@ -189,7 +199,7 @@ const ProductCard = ({ product }: Props) => {
             </Box>
           </Box>
           <Box display="flex" gap={2}>
-            <Button onClick={() => console.log("on press save")} sx={{ p: 0 }}>
+            <Button onClick={onPressSave} sx={{ p: 0 }}>
               Save
             </Button>
             <Box

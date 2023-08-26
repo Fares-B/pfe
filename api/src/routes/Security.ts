@@ -87,7 +87,7 @@ router.post("/reset-password", async (req, res) => {
 		await user.save();
 	
 		// remove all reset password codes with email
-		await ForgotPasswordModel.remove({ email });
+		await ForgotPasswordModel.deleteMany({ email });
 
 		// send email to confirm password has been reset
 		await sendEmail(email, EMAIL_CONTENT.RESET_PASSWORD, { name: user.username });
